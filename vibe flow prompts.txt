@@ -1,0 +1,163 @@
+Below is a set of exemplary prompt “rules” you can use to keep your AI coders aligned with the goals and structure of the Vibe Flow project. These prompts are designed to ensure that each AI-generated contribution is consistent with the overall project vision, adheres to the design and quality standards laid out in the project documentation, and follows best practices for code structure and process. You can tweak them based on task specifics or the module you’re working on.
+
+---
+
+## 1. Global Context and Project Alignment
+
+Each coder should be reminded at the start of a session to work with the big picture in mind:
+
+- **Prompt Rule:**  
+  “You are working on Vibe Flow—a comprehensive AI-assisted project management system designed to streamline app development. Please ensure your output (code, design, or documentation) aligns with the project goals as detailed in the Vibe Flow Comprehensive Overview. Your work must focus on creating robust task management, AI agent orchestration, error-handling, version control, and a user-friendly interface.”  
+  This reaffirms that the project values—making app creation accessible, modular, and efficient—are non-negotiable.  
+  citeturn0file0
+
+---
+
+## 2. Coding Standards and Best Practices
+
+To maintain high-quality code and consistency across modules, include rules that reference best practices:
+
+- **Prompt Rule:**  
+  “Develop modular, well-documented code. Use proper error handling, incorporate unit/integration tests, and ensure that each function or module is accompanied by inline comments that explain your reasoning. Validate that your code integrates with external version control systems (e.g., GitHub) and conforms with the safety and rollback strategies outlined in the design document.”  
+  This reinforces the need for structure, documentation, and robust design necessary for long-term maintenance.  
+  citeturn0file0
+
+- **Prompt Rule:**  
+  “In your code, adhere to the following standards:
+  - **Modularity:** Break down functionality into independent units.  
+  - **Testing:** Include basic tests or usage examples.  
+  - **Commenting:** Provide clear inline comments that reference the corresponding sections of the Vibe Flow design (for instance, task management, error handling, or UI elements).”  
+  This helps coders focus on key aspects and provides traceability back to the project overview.
+
+---
+
+## 3. Task-Specific and Iterative Refinement Guidelines
+
+For every major deliverable (e.g., developing AI agents, integrating with external APIs, designing the UI), ensure that there’s an iterative review process built into the prompts:
+
+- **Prompt Rule:**  
+  “After generating your initial output, provide a self-review that:
+  - Lists potential weaknesses or areas for improvement.
+  - Checks alignment with the Vibe Flow requirements (e.g., automated output evaluation, orchestration methods).
+  - Includes at least one suggestion for refinement (refer to either Chain-of-Draft or reward-based self-evaluation techniques if needed).”  
+  This self-reflection step ensures that the output isn’t static and is improved iteratively before integration.
+
+- **Prompt Rule:**  
+  “Provide a brief summary of how your output meets the core requirements such as:
+  - Task management and agent orchestration.
+  - Error handling and logging.
+  - UI/UX design consistent with the Vibe Flow guidelines.
+  
+  If your output lacks any necessary feature, explicitly note the improvement steps to be taken in the next iteration.”  
+  This ensures that each component is self-aware and encourages the refinement process.
+
+---
+
+## 4. Reward-Based and Self-Critique Mechanism
+
+Incorporate a reward/self-evaluation step into prompts to align with the reward-based improvement method:
+
+- **Prompt Rule:**  
+  “At the end of your response, rate your output on a scale from 1 to 10 based on:
+  - Correctness and completeness.
+  - Adherence to the Vibe Flow requirements.
+  - Code readability and maintainability.
+  
+  Provide a short explanation of your rating and list concrete steps to improve any areas if the rating is below 9. This ‘reward’ check is designed to help you internally calibrate and enhance output quality.”  
+  This method leverages self-assessment to guide further refinements.
+
+---
+
+## 5. Module-Specific Directives
+
+Since Vibe Flow contains several distinct modules (e.g., AI-driven task management, automated AI output evaluation, project dashboard), rules for each module should be tailored accordingly. Here are a couple of examples:
+
+- **For AI Task Management and Agent Orchestration:**
+  - “Your output should implement clear task dependency resolution and support natural language processing features. Ensure that AI agents can communicate smoothly with an orchestration agent that checks for bottlenecks or missing dependencies. Cross-reference with the ‘AI-Driven Task Management’ section in the Vibe Flow Overview for specific functionality.”
+  
+- **For Version Control and Safety Measures:**
+  - “Ensure your code integrates seamlessly with GitHub for version control. Implement automated file versioning and include error-handling logic that prevents infinite loops or unintended file modifications. Refer to the ‘Version Control & Safety’ portion of the Vibe Flow documentation for required practices.”
+
+---
+
+## 6. Continuous Alignment with Project Documentation
+
+To keep all tasks coherent and prevent scope drift, it’s important that each prompt reminds the AI coder to validate their output against the original project plan.
+
+- **Prompt Rule:**  
+  “Before finalizing your work, review the relevant sections of the Vibe Flow Comprehensive Overview to ensure that your solution fully complies with the stated project goals and functionalities. Explicitly mention which parts of the document your current code or design addresses.”
+
+This final check not only maintains consistency but also reinforces the project’s vision in every development phase.
+
+---
+
+Task based mermaid graphs Each node can have a tooltip or a brief description that explains the task’s purpose. This visual representation could be embedded in the project documentation or the task management interface, making it easy for all team members to understand how the tasks interconnect and contribute to overall project goals.
+
+2. Feasibility of Automated Checks in Online LLM Playgrounds
+When it comes to including instructions like running ESLint, Prettier, or other automated quality checks in task prompts—here are some key points:
+
+Direct Execution Limitations:
+An online LLM playground generally won’t run a live linting or formatting tool like ESLint/Prettier. The language model isn’t integrated with your runtime environment. Instead, the idea is to instruct the AI to generate code that follows best practices (e.g., clean formatting, well-commented code). It’s more about asking the AI to simulate the process rather than executing actual validation in real time.
+
+Instructional Prompts:
+In your task prompt, instead of literal commands to run tools, include language such as:
+
+“Ensure that the code adheres to ESLint standards and follows the Prettier formatting style.”
+
+“Output a summary of coding style adherence as if you had run automated checks.”
+
+This tells the model to self-impose quality checks based on its training, and while it doesn’t actually run a linter, it can generate code that meets those conventions.
+
+Context Limitations and One-Shot Tasks:
+As you noted, your aim is to keep prompts concise and manage tasks as one-shot, context-specific assignments with clear dependency notes. This approach works well given the token constraints and usage restrictions across various online platforms. The key is ensuring that each prompt is self-contained with:
+
+Concise Context: A short explanation of what the task is and how it fits in the overall project.
+
+Dependency Note: Clear references to any related tasks or files (including token counts or context sizes, if needed).
+
+Output Expectations: Specifications on the expected output, such as file names, code quality notes, and integration instructions.
+
+Using Simulated Checks:
+Even if the LLM can’t actually run an ESLint or Prettier check, you can instruct it to include a comment block that states the expected style guidelines. For example:
+
+javascript
+Copy
+Edit
+// This code follows ESLint rules and is formatted according to Prettier guidelines.
+function exampleTask() {
+    // Task logic here
+}
+Such simulated checks serve as a guideline for human reviewers or subsequent automation in your CI/CD pipeline.
+
+Summary of Recommendations
+Mermaid Graph for Task Traceability:
+Use visual diagrams to map out task relationships, purposes, and dependencies. This enhances clarity for non-technical team members.
+
+Concise, Context-Specific Prompts:
+Develop task prompts that are short, manageable, and self-contained. Each prompt should:
+
+Clearly explain the task, its purpose, and its relation to other tasks.
+
+Specify any dependencies or related files, along with token counts or context size limitations.
+
+Provide output expectations, including code formatting and quality standards simulated via textual instructions.
+
+Simulation of Automated Checks:
+Rather than expecting direct execution of tools like ESLint or Prettier in online platforms, instruct the LLM to produce code as if those checks had been performed. This helps maintain quality and consistency in a parallel development environment.
+
+By incorporating these strategies, you will reinforce the overall project context and quality standards, while accommodating the constraints of web-based development platforms and ensuring clear, traceable task management throughout your parallel processes.
+
+
+
+
+
+
+
+
+
+
+## Conclusion
+
+To summarize, the best prompts for keeping AI coders on track involve a blend of global project context, strict coding and process standards, iterative self-review (including reward-based self-evaluation), and module-specific directives. Using these rules—as shown in the examples above—helps ensure that every piece of generated code or documentation adheres to the strategic vision of Vibe Flow, thus ultimately enhancing quality, maintainability, and alignment with project goals. 
+
+By referencing the Vibe Flow Comprehensive Overview (citeturn0file0) at key decision points and enforcing iterative self-improvement, you create a robust framework for AI-assisted development that not only streamlines the process but also fosters a high degree of code reliability and project coherence.

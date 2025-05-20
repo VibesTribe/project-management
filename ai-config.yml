@@ -1,0 +1,15 @@
+ai_profiles:
+  default:
+    export_format: universal
+    context_rules:
+      max_files: 3
+      max_tokens: 4000
+      
+  claude_web:
+    extends: default
+    template: claude-export.md
+    file_limit: 2
+    
+  deepseek_api:
+    extends: default
+    template: api-task.json

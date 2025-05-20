@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Project Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ========== BASE STYLES ========== */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 50px;
+            height: 100vh;
+            position: fixed;
+            background: #2c3e50;
+            transition: width 0.3s ease;
+            overflow: hidden;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.expanded {
+            width: 250px;
+        }
+
+        .sidebar-toggle {
+            padding: 15px;
+            text-align: right;
+            color: white;
+            cursor: pointer;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-nav li {
+            padding: 12px 15px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .sidebar-nav li:hover {
+            background: #34495e;
+        }
+
+        .sidebar-nav li i {
+            width: 25px;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        .nav-text {
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.expanded .nav-text {
+            opacity: 1;
+        }
+
+        /* ========== COLLAPSIBLE SECTIONS ========== */
+        .file-section {
+            margin-bottom: 15px;
+        }
+
+        .section-header {
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            background: #34495e;
+            border-radius: 4px;
+            margin: 8px 0;
+            transition: all 0.2s;
+            color: #f1c40f !important;
+        }
+
+        .section-header:hover {
+            background: #3d566e;
+        }
+
+        .section-header i {
+            margin-right: 10px;
+            transition: transform 0.3s;
+            color: #ffffff !important;
+        }
+
+        .section-header.collapsed i {
+            transform: rotate(-90deg);
+        }
+
+        .section-files {
+            padding-left: 15px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            max-height: 500px;
+        }
+
+        .section-files.collapsed {
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        /* ========== FILE ITEMS ========== */
+        .file-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #34495e;
+            display: flex;
+            align-items: center;
+            color: #ffffff !important;
+            min-height: 35px;
+            cursor: pointer;
+        }
+
+        .file-item i {
+            margin-right: 10px;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 50px;
+            padding: 25px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            background: white;
+        }
+
+        /* ========== GITHUB DIALOG ========== */
+        .github-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        /* ========== FILE MODAL ========== */
+        .file-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            width: 80%;
+            max-width: 1200px;
+            min-height: 60vh;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+
+        .modal-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-content {
+            padding: 25px;
+            max-height: 70vh;
+            overflow-y: auto;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal-content pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 8px;
+            font-size: 1.5em;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        /* ========== EXPLORER HEADER ========== */
+        .explorer-header {
+            color: #ffffff !important;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ========== TOAST NOTIFICATION ========== */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .refresh-toast {
+            background: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            animation: slideIn 0.3s, fadeOut 0.5s 2s forwards;
+            margin-left: 5px;
+        }
+
+        /* ========== SCROLLBAR STYLING ========== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #34495e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #5a7a9c;
+            border-radius: 4px;
+        }
+
+        .file-items {
+            max-height: calc(100vh - 280px);
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="modal-overlay" id="modalOverlay" onclick="closeFileModal()"></div>
+    <div class="file-modal" id="fileModal">
+        <div class="modal-header">
+            <div>
+                <span id="fileName"></span>
+                <small id="fileSize"></small>
+            </div>
+            <span class="modal-close" onclick="closeFileModal()">&times;</span>
+        </div>
+        <div class="modal-content" id="fileContent"></div>
+    </div>
+
+    <div class="sidebar" id="sidebar" onmouseenter="handleSidebarHover(true)" onmouseleave="handleSidebarHover(false)">
+        <div class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <ul class="sidebar-nav">
+            <li onclick="handleFolderOpen()">
+                <i class="fas fa-folder-open" style="color: #f1c40f"></i>
+                <span class="nav-text">Open Folder</span>
+            </li>
+            <li onclick="showGitHubDialog()">
+                <i class="fab fa-github" style="color: #ecf0f1"></i>
+                <span class="nav-text">GitHub Repo</span>
+            </li>
+            <li onclick="handleFileUpload()">
+                <i class="fas fa-upload" style="color: #3498db"></i>
+                <span class="nav-text">Upload Files</span>
+            </li>
+            <li onclick="handleRefresh()">
+                <i class="fas fa-sync" style="color: #2ecc71"></i>
+                <span class="nav-text">Refresh Files</span>
+            </li>
+        </ul>
+
+        <div class="explorer-section">
+            <div class="explorer-header" onclick="toggleSidebar()">
+                <i class="fas fa-search" style="color: #ffffff; margin-left: 5px;"></i>
+                <span class="nav-text">File Explorer</span>
+            </div>
+            <div class="file-items" id="fileItems"></div>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <h1 style="color: #2c3e50; margin-bottom: 25px;">AI Project Dashboard</h1>
+        <div class="dashboard-content">
+            <div id="file-display" style="padding: 20px; border: 2px dashed #ecf0f1; border-radius: 8px;">
+                <p style="color: #7f8c8d;">Select files or repositories using the sidebar controls</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="github-dialog" id="githubDialog">
+        <h3 style="margin: 0 0 15px 0; color: #2c3e50;">GitHub Repository</h3>
+        <input type="text" id="githubUrl" placeholder="username/repository" 
+               style="width: 300px; padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px;">
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+            <button onclick="handleGitHubSubmit()" 
+                    style="padding: 8px 20px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Open
+            </button>
+            <button onclick="closeGitHubDialog()" 
+                    style="padding: 8px 20px; background: #95a5a6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let isManuallyExpanded = false;
+        let hasFiles = false;
+        let hoverTimeout;
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        let folderFiles = [];
+        let uploadedFiles = [];
+        let sectionStates = { folder: false, uploaded: false };
+
+        function handleSidebarHover(enter) {
+            if (!isManuallyExpanded && !hasFiles) {
+                clearTimeout(hoverTimeout);
+                if (enter) {
+                    sidebar.classList.add('expanded');
+                    updateContentMargin();
+                } else {
+                    hoverTimeout = setTimeout(() => {
+                        if (!hasFiles) {
+                            sidebar.classList.remove('expanded');
+                            updateContentMargin();
+                        }
+                    }, 300);
+                }
+            }
+        }
+
+        function toggleSidebar() {
+            isManuallyExpanded = !isManuallyExpanded;
+            sidebar.classList.toggle('expanded', isManuallyExpanded);
+            updateContentMargin();
+            document.querySelector('.sidebar-toggle i').classList.toggle('fa-chevron-left');
+        }
+
+        function updateContentMargin() {
+            mainContent.style.marginLeft = sidebar.classList.contains('expanded') ? '250px' : '50px';
+        }
+
+        function handleRefresh() {
+            updateFileExplorer();
+            showToast('Files refreshed!');
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'refresh-toast';
+            toast.textContent = message;
+            document.getElementById('toast-container').appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        function handleFolderOpen() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.webkitdirectory = true;
+            input.onchange = (e) => {
+                folderFiles = Array.from(e.target.files);
+                hasFiles = true;
+                sectionStates.folder = false;
+                updateFileExplorer();
+                maintainExpandedState();
+            };
+            input.click();
+        }
+
+        function handleFileUpload() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.onchange = (e) => {
+                uploadedFiles = [...uploadedFiles, ...Array.from(e.target.files)];
+                hasFiles = true;
+                sectionStates.uploaded = false;
+                updateFileExplorer();
+                maintainExpandedState();
+            };
+            input.click();
+        }
+
+        function maintainExpandedState() {
+            if (!isManuallyExpanded) {
+                sidebar.classList.add('expanded');
+                updateContentMargin();
+            }
+        }
+
+        function toggleSection(section) {
+            sectionStates[section] = !sectionStates[section];
+            updateFileExplorer();
+            if (sectionStates[section]) {
+                sidebar.classList.add('expanded');
+                updateContentMargin();
+            }
+        }
+
+        function updateFileExplorer() {
+            const fileItems = document.getElementById('fileItems');
+            fileItems.innerHTML = `
+                ${uploadedFiles.length ? `
+                <div class="file-section">
+                    <div class="section-header ${sectionStates.uploaded ? '' : 'collapsed'}" 
+                         onclick="toggleSection('uploaded')">
+                        <i class="fas fa-chevron-down"></i>
+                        Uploaded Files (${uploadedFiles.length})
+                    </div>
+                    <div class="section-files ${sectionStates.uploaded ? '' : 'collapsed'}">
+                        ${uploadedFiles.map((file, index) => fileItemHTML(file, false, index)).join('')}
+                    </div>
+                </div>` : ''}
+                
+                ${folderFiles.length ? `
+                <div class="file-section">
+                    <div class="section-header ${sectionStates.folder ? '' : 'collapsed'}" 
+                         onclick="toggleSection('folder')">
+                        <i class="fas fa-chevron-down"></i>
+                        Folder Contents (${folderFiles.length})
+                    </div>
+                    <div class="section-files ${sectionStates.folder ? '' : 'collapsed'}">
+                        ${folderFiles.map((file, index) => fileItemHTML(file, true, index)).join('')}
+                    </div>
+                </div>` : ''}
+            `;
+        }
+
+        function fileItemHTML(file, isFolderFile, index) {
+            return `<div class="file-item" onclick="handleFileClick(${index}, ${isFolderFile})">
+                <i class="${getFileIcon(file)}"></i>
+                ${file.name}
+                <small style="margin-left: auto;">
+                    ${formatFileSize(file.size)}
+                    ${isFolderFile ? '<span> (folder)</span>' : ''}
+                </small>
+            </div>`;
+        }
+
+        function getFileIcon(file) {
+            return file.type.startsWith('image/') ? 'fas fa-image' :
+                   file.type.startsWith('text/') ? 'fas fa-file-alt' :
+                   'fas fa-file';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function handleFileClick(index, isFolderFile) {
+            const file = isFolderFile ? folderFiles[index] : uploadedFiles[index];
+            if (!file) return;
+
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = ` • ${formatFileSize(file.size)}`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = file.type.startsWith('image/') 
+                    ? `<img src="${e.target.result}" style="max-width: 100%;">`
+                    : `<pre>${e.target.result}</pre>`;
+                
+                document.getElementById('fileContent').innerHTML = content;
+            };
+            
+            if (file.type.startsWith('image/')) {
+                reader.readAsDataURL(file);
+            } else {
+                reader.readAsText(file);
+            }
+
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('fileModal').style.display = 'block';
+        }
+
+        function closeFileModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('fileModal').style.display = 'none';
+            document.getElementById('fileContent').innerHTML = '';
+        }
+
+        function showGitHubDialog() {
+            document.getElementById('githubDialog').style.display = 'block';
+        }
+
+        function handleGitHubSubmit() {
+            const urlInput = document.getElementById('githubUrl');
+            let url = urlInput.value.trim();
+            
+            if (!url) return;
+            
+            if (!url.startsWith('http')) {
+                url = `https://github.com/${url}`;
+            }
+
+            window.open(url, '_blank') || alert('Please allow popups to open GitHub repositories');
+            closeGitHubDialog();
+        }
+
+        function closeGitHubDialog() {
+            document.getElementById('githubDialog').style.display = 'none';
+            document.getElementById('githubUrl').value = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateContentMargin();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+﻿﻿﻿﻿AI-Powered Task Management System
+Project Overview
+System Name: AI-Powered Task Management System
+Core Purpose: Enable human oversight of LLM-assisted coding through visual task tracking, context-aware AI delegation, and loop prevention.
+Key Features
+* Context Window Management
+   * Auto-calculate token usage of existing files/task descriptions
+   * Suggest subtask breakdowns for large tasks
+* Safety & Validation
+   * 3-strike loop detection with color-coded alerts
+   * GitHub branch protection for critical files
+   * Hourly auto-backups with 7-day retention
+* Task Orchestration
+   * Unlimited task hierarchy (phases → tasks → subtasks → microtasks)
+   * Dual documentation system (human-readable + AI-optimized)
+   * Manual web platform handoff with token reports
+* Visual System
+   * Custom color coding per task state/dependency
+   * Mermaid.js flowcharts for project overview
+   * Real-time progress dashboards
+Technical Specifications
+Component
+	Technology
+	Description
+	Frontend
+	HTML/CSS/JS
+	Responsive dashboard with collapsible tasks
+	File Monitor
+	Node.js (ES Modules)
+	Watches folder for changes with SHA-256 hashing
+	Token Calc
+	Custom Engine
+	(fileSize/4)*1.1 buffer-inclusive estimator
+	Backup
+	Git + ZIP
+	Versioned snapshots to GitHub/backups folder
+	Full Project Plan
+Phase 1: Core Architecture (🟣 Independent)
+* Objective: Basic task structure with file-aware token calculation
+* Color: 🟣 #800080
+* Success Criteria: Functional web interface with manual task management
+Task ID
+	Description
+	Token Calc
+	Deliverables
+	Dependencies
+	P1
+	Core Architecture Setup
+	-
+	System blueprint
+	None
+	P1.1
+	Task Hierarchy System
+	File-based
+	Nested DOM structure
+	None
+	P1.1.1
+	Nested DOM Structure
+	LOC Count
+	Expandable UI components
+	None
+	P1.1.2
+	CSS Color Variables
+	CSS Var
+	Color-coded borders
+	P1.1.1
+	P1.2
+	Context Window Manager / File Token System
+	Actual Sizes
+	Token warnings
+	None
+	P1.2.1
+	File Watcher
+	SHA-256
+	Real-time file tracking
+	None
+	P1.2.2
+	File Token Calculator
+	(length/4)*1.1
+	Per-file token display / Conservative estimator
+	None
+	Phase 2: Safety & Validation (🔵 Dependent)
+* Objective: Prevent destructive changes
+* Color: 🔵 #0000FF
+* Success Criteria: 3-strike system with protected backups
+Task ID
+	Description
+	Validation Method
+	Deliverables
+	Dependencies
+	P2
+	Change Control
+	-
+	Rollback system
+	-
+	P2.1
+	Loop Prevention / File Guardian
+	Hash comparison
+	Red flag system / Protected files list
+	P1.2
+	P2.1.1
+	Attempt Tracker / Read-Only Lock
+	SHA-256
+	Strike counter / Core system files
+	-
+	P2.1.2
+	Status Escalation / Change Detection
+	3-strike rule / Hash Compare
+	Orange/Red alerts / Auto-snapshots
+	-
+	P2.2
+	GitHub Integration / Task Archaeology
+	Pattern Matching / ZIP
+	Protected branches / 7-day retention
+	P1.1
+	P2.2.1
+	Auto-Commit
+	File changes
+	ai-updates/ branches
+	-
+	P2.2.2
+	Rollback System / Backups
+	ZIP snapshots
+	7-day retention
+	-
+	P2.3
+	Backup System
+	-
+	Manual + auto snapshots
+	None
+	P2.3.1
+	Zip Archiving
+	-
+	Timestamped backups
+	-
+	P2.3.2
+	7-Day Retention
+	-
+	Auto-cleanup
+	-
+	Phase 3: Task Packaging (🟢 Dependent)
+* Objective: Create LLM-ready task bundles
+* Color: 🟢 #008000
+* Success Criteria: End-to-end manual workflow
+Task ID
+	Description
+	Components
+	Deliverables
+	Dependencies
+	P3
+	Export System
+	Flat files
+	Web-ready packages
+	P1.2+P2.1
+	P3.1
+	Task Packaging / Template Engine
+	- / Mustache.js
+	AI-ready context bundles / Standardized format
+	T1.3
+	P3.1.1
+	Human Brief / Brief Generator
+	task.md
+	Markdown template
+	-
+	P3.1.2
+	AI Context / AI Context Generator
+	ai-context.md / ai-context.json
+	Token report / Structured data
+	P1.2.2
+	P3.2
+	Token Audit
+	Existing files
+	usage.json
+	P1.2.1
+	P3.2.1
+	File Manifest Builder
+	Paths/sizes
+	File manifest
+	-
+	P3.2.2
+	Buffer Calculator
+	+10% rule
+	Safety margins
+	-
+	Phase 4: UI & Reporting (🟠 Dependent)
+* Objective: Improve dashboard and context monitoring.
+* Color: 🟠
+* Success Criteria: Clear progress visualization and token usage monitoring.
+Task ID
+	Description
+	Components
+	Deliverables
+	Dependencies
+	P4
+	Dashboard 2.0
+	Color coding
+	Status hierarchy
+	P1.1
+	P4.1
+	Dashboard 2.0
+	Color coding
+	Status hierarchy
+	P1.1
+	P4.1.1
+	Legend System
+	CSS vars
+	Interactive key
+	-
+	P4.1.2
+	Progress Matrix
+	Mermaid.js
+	Auto-updating chart
+	-
+	P4.2
+	Context Monitor
+	Real-time
+	Token gauges
+	P1.2
+	P4.2.1
+	Context Window Display
+	N/A
+	Per-file and total token counts
+	-
+	P4.2.2
+	File Preview
+	Monaco editor
+	Read-only viewer
+	-
+	Phase 5: GitHub Integration (🟤 Dependent)
+* Objective: Integrate with GitHub for enhanced collaboration and version control.
+* Color: 🟤 #A0522D
+* Success Criteria: Seamless connection with GitHub repositories and efficient management of AI-generated changes.
+Task ID
+	Description
+	Components
+	Deliverables
+	Dependencies
+	P5
+	GitHub Authentication and Connection
+	OAuth 2.0
+	Secure connection to GitHub
+	P2
+	P5.1
+	Branch Management
+	Git API
+	Automated branch creation/management for AI changes
+	P2.2.1
+	P5.2
+	Pull Request Automation
+	Git API
+	Automatic pull request generation with detailed change logs
+	P2.2.1
+	P5.3
+	GitHub Status Integration
+	Git API
+	Real-time feedback on AI task status within GitHub
+	P4
+	Task Template Files
+Folder Structure
+TASK_EXPORT/
+├── For_Humans/
+│   ├── Task-Brief.md # Full description
+│   └── Specifications/ # Optional PDFs
+├── For_AI/
+│   ├── Instructions.md # Token-optimized
+│   └── Token-Report.json # Usage breakdown
+└── Code_Files/ # Existing files only
+   ├── main.js # [254 tokens]
+   └── styles.css # [187 tokens]
+/task-templates └── T1.2.3.4.1/ ├── task.md # Human-readable instructions ├── context/ # Required input files ├── ai-context.md # LLM-formatted context └── token-breakdown.json # Automatic token calculation
+
+Token-Report.json
+{
+ "task_id": "T1.2.3",
+ "platform": "claude-free",
+ "total_tokens": 441,
+ "breakdown": {
+   "files": {
+     "main.js": 254,
+     "styles.css": 187
+   },
+   "buffer": 44,
+   "remaining": 95559
+ },
+ "warnings": [
+   "IE11 fallback required",
+   "Modernizr dependency"
+ ]
+}
+
+AI Context Package (ai-context.md)
+## TASK CONTEXT PACKAGE [T1.2.3.4]
+**Objective**: Add IE11 fallback to CSS Grid layout
+**Token Limit**: 800
+**Critical Files**:
+- /css/layout.css (320 tokens)
+- /docs/browser-support.md (120 tokens)
+**Constraints**:
+1. Maintain mobile-first approach
+2. Use feature detection
+3. Keep specificity under 0-3-1
+**Failure Conditions**:
+- Layout breaks in IE11
+- Modernizr not initialized
+
+Human Task Brief (task.md)
+## [T1.2.3.4] Implement CSS Grid Fallback
+**Token Budget**: 1,200 (800 AI + 400 Human Review)
+**Input Requirements**
+- [ ] `layout.css` (Current)
+- [ ] `browser-support.md`
+**Success Criteria**
+| Metric | Target |
+| ------------------ | ------------------ |
+| IE11 Support | Fully Functional |
+| CSS Validation | W3C Approved |
+**Implementation Steps**
+1. Add Modernizr detection
+2. Create flexbox fallback
+3. Test cross-browser
+**Nested Subtasks**
+- [T1.2.3.4.1] Modernizr Integration (250 tokens)
+- [T1.2.3.4.2] Fallback Styling (550 tokens)
+**Sample Input**
+```css
+.container {
+ display: grid;
+}
+
+Expected Output
+.container {
+ display: flex;
+ display: grid;
+}
+
+Color Enforcement Rules
+/* From your original system */
+.task[data-status="planned-independent"] { background: #800080; }
+.task[data-status="planned-dependent"] { background: #4B0082; }
+.task[data-status="in-progress"] { background: #0000FF; }
+.task[data-status="alert-orange"] { border: 3px solid #FFA500; }
+.task[data-status="alert-red"] { border: 3px solid #FF0000; }
+.task[data-status="completed"] { background: #008000; }
+
+Implementation Roadmap
+2025-04-01 : Phase 1 (Core)
+2025-04-15 : Phase 2 (Safety)
+2025-04-25 : Phase 3 (Packaging)
+2025-05-01 : Phase 4 (UI)
+2025-05-15 : Phase 5 (GitHub)
+
+Usage
+* Save to project root folder
+* Use as master reference
+* Auto-import into dashboard via file watcher
+* Update via PRs to GitHub plan branch
+
+AI-Powered Task Management System v3.0
+Core Principle: "One Source of Truth with Auto-Sync"
+
+Enhanced File Structure
+Copy
+/project-root/
+├── AI-Memory-Bank/  
+│   ├── active-tasks.clineplan  # YAML project state  
+│   └── history/               # Versioned backups  
+├── sync-engine/  
+│   ├── file-watcher.js        # Change detection  
+│   └── conflict-resolver.py  
+└── dashboard/  
+    ├── realtime.html          # Websocket UI  
+    └── mobile-view/  
+Updated Phase Breakdown
+Phase 2.5: Auto-Sync System (🟡 Dependent)
+Objective: Implement cross-platform state synchronization
+Success Criteria: <3s update latency across 3 platforms
+
+Task ID	Description	Components	Dependencies
+P2.5.1	File watcher with hash validation	Chokidar, XXH3	P1.2.1 (File Monitor)
+P2.5.2	Multi-cloud backup engine	rclone, GitAPI	P2.2 (GitHub)
+P2.5.3	Real-time dashboard updates	WebSocket, SSE	P4.1 (UI)
+P2.5.4	Conflict resolution protocol	3-way merge	P2.1 (Safety)
+New Critical Path
+mermaid
+Copy
+sequenceDiagram
+    participant D as Dashboard
+    participant F as File Watcher
+    participant S as Sync Engine
+    participant C as Cloud Storage
+    
+    D->>F: Subscribe to changes
+    F->>S: File modified (SHA-256)
+    S->>C: Verify against last sync
+    alt Changes valid
+        C-->>S: Approval
+        S->>D: Broadcast update
+        S->>C: Push to all platforms
+    else Conflict
+        S->>D: Flag discrepancy
+        D->>S: Manual resolution
+    end
+Integrated Task List
+Phase 3: Task Packaging (Updated)
+Add:
+
+yaml
+Copy
+- id: P3.3.3
+  desc: Auto-embed sync metadata
+  validation: Metadata survives 3 platform transfers
+  token_cost: 220
+Phase 5: GitHub Integration (Expanded)
+Add:
+
+yaml
+Copy
+- id: P5.4
+  desc: Auto-sync to GitHub Issues
+  cmd: cline sync-issues --auto
+  trigger: On task state change
+Security Addendum
+yaml
+Copy
+encryption:
+  - phase: 2.5
+  - tasks:
+      - P2.5.6: Implement AES-256 file encryption
+      - P2.5.7: Biometric access control
+  - audit: Nightly key rotation
+Updated Implementation Roadmap
+mermaid
+Copy
+gantt
+    title Version 3.0 Timeline
+    dateFormat  YYYY-MM-DD
+    section Core
+    Phase 1-2       :done,    des1, 2024-03-01, 14d
+    section Sync
+    File Watcher    :active,  des2, 2024-03-15, 7d
+    Cloud Integration :        des3, after des2, 5d
+    section UI
+    Realtime Update :         des4, after des3, 4d
+Validation Commands
+bash
+Copy
+# Test full sync cycle
+cline test-sync --platforms=local,github,gdrive --iterations=5
+
+# Stress test dashboard
+cline load-test --users=100 --duration=1h
+
+# Verify encryption
+cline audit-security --full
+Recovery Protocol Integration
+Added to Phase 2.2:
+
+yaml
+Copy
+- id: P2.2.3
+  desc: 7-day rolling backup verification
+  cmd: cline verify-backups --days=7
+  schedule: 0 3 * * *  # Daily 3 AM
+Key Improvements Over Previous Version:
+
+Unified sync logic across all phases
+
+Explicit cloud platform requirements
+
+Built-in recovery validation
+
+Security-first design
+
+Real-time performance guarantees
+
+Additional Measures
+To prevent loops and ensure task focus, the following measures will be implemented:
+
+1. **Implement Loop Detection:** Track failed attempts for each task using hash comparison. If a task fails twice with the same approach, try a new approach. If the new approach also fails twice, stop the task, create a memory backup, and flag the task with a task issue note.
+2. **Enforce Task Plan Review:** Before starting any task, review the task plan, requirements, and related files.
+3. **Implement Backup Mechanism:** Before starting any task that involves reading and editing files, create a backup of the relevant files.

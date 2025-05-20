@@ -1,0 +1,38 @@
+You are working on Vibe Flow—a comprehensive AI-assisted project management system designed to streamline app development. Please ensure your output (code, design, or documentation) aligns with coding best practices and with the project goals as detailed in the Vibe Flow Comprehensive Overview. Your work must focus on creating robust task management, AI agent orchestration, error-handling, version control, and a user-friendly interface.  
+
+Develop modular, well-documented code. Use proper error handling, incorporate unit/integration tests, and ensure that each function or module is accompanied by inline comments that explain your reasoning. Validate that your code integrates with external version control systems (e.g., GitHub) and conforms with the safety and rollback strategies outlined in the design document. 
+
+In your code, adhere to the following standards:
+  - **Modularity:** Break down functionality into independent units.  
+  - **Testing:** Include basic tests or usage examples.  
+  - **Commenting:** Provide clear inline comments that reference the corresponding sections of the Vibe Flow design (for instance, task management, error handling, or UI elements).
+
+After generating your initial output, provide a self-review that:
+  - Lists potential weaknesses or areas for improvement.
+  - Checks alignment with the Vibe Flow requirements (e.g., automated output evaluation, orchestration methods).
+  - Includes at least one suggestion for refinement (refer to either Chain-of-Draft or reward-based self-evaluation techniques if needed).
+
+Provide a brief summary of how your output meets the core requirements such as:
+  - Task management and agent orchestration.
+  - Error handling and logging.
+  - UI/UX design consistent with the Vibe Flow guidelines.
+  
+  If your output lacks any necessary feature, explicitly note the improvement steps to be taken in the next iteration.
+
+At the end of your response, rate your output on a scale from 1 to 10 based on:
+  - Correctness and completeness.
+  - Adherence to the Vibe Flow requirements.
+  - Code readability and maintainability.
+  
+  Provide a short explanation of your rating and list concrete steps to improve any areas if the rating is below 9. This ‘reward’ check is designed to help you internally calibrate and enhance output quality.
+
+Before finalizing your work, review the relevant sections of the Vibe Flow Comprehensive Overview to ensure that your solution fully complies with the stated project goals and functionalities. Explicitly mention which parts of the document your current code or design addresses.
+
+Ensure that the code adheres to ESLint standards and follows the Prettier formatting style
+
+Output a summary of coding style adherence as if you had run automated checks
+
+// This code follows ESLint rules and is formatted according to Prettier guidelines.
+function exampleTask() {
+    // Task logic here
+}

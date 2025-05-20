@@ -1,0 +1,170 @@
+Universal AI Project Orchestrator
+1. Core Architecture Update
+diff
+Copy
+AI Project Manager
+├── Project Tracking
+│   ├── Phase Manager
+│   └── Task Router
++├── AI Gateway
++│   ├── Export Engine
++│   └── Profile Loader
+└── Interface Layer
+    ├── VSCode Dashboard
+    └── CLI Tools
+2. Key Configuration File
+Create ai-config.yml:
+
+yaml
+Copy
+ai_profiles:
+  default:
+    export_format: universal
+    context_rules:
+      max_files: 3
+      max_tokens: 4000
+      
+  claude_web:
+    extends: default
+    template: claude-export.md
+    file_limit: 2
+    
+  deepseek_api:
+    extends: default
+    template: api-task.json
+3. Generalized Export System
+Command:
+
+bash
+Copy
+ai-export --target auth-service.js --profile any_ai
+Output Structure:
+
+Copy
+exports/
+└── 20240315-auth-service/
+    ├── TASK.md            # AI-agnostic brief
+    ├── FOCUS_FILE.js      # Main file to modify
+    └── CONTEXT/           # Supporting files
+        ├── config.js
+        └── errors.log
+4. Implementation Files
+A. Universal Export Script (scripts/ai-export.js):
+
+javascript
+Copy
+const { AIProfiles } = require('./ai-profiles');
+
+async function exportTask(task, profileName = 'default') {
+  const profile = AIProfiles.load(profileName);
+  const package = {
+    task: task.description,
+    files: await selectRelevantFiles(task, profile),
+    context: generateContextBrief(profile)
+  };
+  
+  return createExportZip(package);
+}
+
+function generateContextBrief(profile) {
+  return `[Project ${profile.name} Export]
+  Current Phase: ${getCurrentPhase()}
+  Focus: ${getFocusFiles()}
+  Requirements: ${getTaskRequirements()}`;
+}
+B. Dashboard Template (dashboard/dashboard.html):
+
+html
+Copy
+<div class="ai-export-panel">
+  <h3>AI Export Ready</h3>
+  <select id="aiProfileSelect">
+    <option value="default">Universal</option>
+    <option value="claude_web">Claude Web</option>
+    <option value="deepseek">DeepSeek</option>
+  </select>
+  <button onclick="exportTask()">Generate Package</button>
+</div>
+Run HTML
+5. VSCode Integration Update
+Modified Settings (.vscode/settings.json):
+
+json
+Copy
+{
+  "aiProject.exportProfiles": {
+    "default": {
+      "maxFiles": 3,
+      "format": "markdown"
+    },
+    "claude": {
+      "maxFiles": 2,
+      "template": "claude-template.md"
+    }
+  }
+}
+6. Workflow Process
+Track Progress:
+
+bash
+Copy
+ai-track --update-phase "Auth System"
+Export for Any AI:
+
+bash
+Copy
+ai-export --file refresh.js --attach config.js
+# Creates: exports/refresh-20240315.zip
+Import Fixes:
+
+bash
+Copy
+ai-import --file fixed-refresh.js --log "Added error handling"
+7. Implementation Steps
+Create Base Configuration:
+
+bash
+Copy
+ai-init --config-only
+Add AI Profiles:
+
+bash
+Copy
+ai-profile add claude_web --files 2 --template claude.md
+Daily Usage:
+
+bash
+Copy
+# Start working
+ai-start-task "Fix token refresh"
+
+# Export when needed
+ai-export --profile claude_web
+
+# After external fix
+ai-complete-task --file fixed-code.js
+8. Key Advantages
+AI-Agnostic: Same workflow for Claude/Gemini/Others
+
+Profile System: Customize exports per AI's requirements
+
+No Vendor Lock-in: Switch AIs without system changes
+
+Future-Proof: Add new AI profiles via config
+
+Next Actions
+Run ai-init to create base structure
+
+Modify ai-config.yml for your preferred AIs
+
+Use ai-export/ai-import during development
+
+Would you like me to:
+
+Provide the complete ai-profiles.js implementation?
+
+Show how to create custom export templates?
+
+Explain the phase tracking database structure?
+
+This system maintains all previous functionality while removing AI-specific dependencies - perfect for evolving project needs! 🚀

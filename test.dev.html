@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Project Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.0.0/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --completed: #4CAF50;
+            --in-progress: #2196F3;
+            --planned: #9C27B0;
+            --planned-independent: #800080;
+            --planned-dependent: #4B0082;
+            --alert-orange: #FFA500;
+            --alert-red: #FF0000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* Main Layout Container */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 40px;
+            background-color: #333;
+            transition: width 0.3s ease;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar.expanded {
+            width: 200px;
+        }
+
+        .sidebar-toggle {
+            text-align: right;
+            padding: 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            padding: 12px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+            color: white;
+        }
+
+        .sidebar-nav li:hover {
+            background-color: #444;
+        }
+
+        .sidebar-nav li i {
+            width: 20px;
+            text-align: center;
+            margin-right: 15px;
+        }
+
+        .nav-text {
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar.expanded .nav-text {
+            opacity: 1;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Scrollable Content */
+        .scrollable-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Sticky Header */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #f8f9fa;
+            padding: 20px 20px 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Project Overview */
+        .project-overview h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        /* Updated Filter Controls */
+        .filter-controls {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+.filter-btn {
+            padding: 6px 12px;
+            border: 2px solid;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            min-width: auto;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            background-color: black;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+.filter-btn i {
+            margin-right: 5px;
+        }
+
+.filter-btn[data-filter="all"] {
+            border-color: #333;
+        }
+
+.filter-btn[data-filter="completed"] {
+            border-color: var(--completed);
+        }
+
+.filter-btn[data-filter="in-progress"] {
+            border-color: var(--in-progress);
+        }
+
+.filter-btn[data-filter="planned"] {
+            border-color: var(--planned);
+        }
+
+        .filter-btn[data-filter="assist"] {
+            border-color: var(--alert-red);
+        }
+
+        .filter-btn i {
+            margin-right: 5px;
+        }
+
+        /* Progress Chart */
+        .progress-chart {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .bar-container {
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            margin: 10px 0;
+        }
+
+        .bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 60px;
+            transition: width 0.3s ease;
+        }
+
+        .segment-completed { background: var(--completed); }
+        .segment-in-progress { background: var(--in-progress); }
+        .segment-planned-independent { background: var(--planned-independent); }
+        .segment-planned-dependent { background: var(--planned-dependent); }
+
+        /* Tasks */
+        .tasks-container {
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .task {
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            background: white;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .task:hover {
+            transform: translateX(5px);
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .task-content {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .task-id {
+            font-weight: bold;
+            min-width: 40px;
+            color: #555;
+        }
+
+        .task-name {
+            color: #333;
+        }
+
+        .completed {
+            border-left-color: var(--completed);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .in-progress {
+            border-left-color: var(--in-progress);
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        .planned-independent {
+            border-left-color: var(--planned-independent);
+            background-color: rgba(128, 0, 128, 0.1);
+        }
+
+        .planned-dependent {
+            border-left-color: var(--planned-dependent);
+            background-color: rgba(75, 0, 130, 0.1);
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        /* Mermaid Diagram */
+        .mermaid-container {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Toast */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            background: #333;
+            color: white;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toast.visible {
+            opacity: 1;
+        }
+
+        /* Sample content for scrolling */
+        .sample-content {
+            height: 2000px;
+            background: linear-gradient(white, #f0f0f0);
+            margin-top: 20px;
+            border-radius: 8px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <ul class="sidebar-nav">
+                <li onclick="openFolder()">
+                    <i class="fas fa-folder-open" style="color: #d1980f;"></i>
+                    <span class="nav-text">Open Folder</span>
+                </li>
+                <li onclick="openGitHubRepo()">
+                    <i class="fab fa-github"></i>
+                    <span class="nav-text">GitHub Repo</span>
+                </li>
+                <li onclick="uploadFile()">
+                    <i class="fas fa-upload" style="color: #457b9d;"></i>
+                    <span class="nav-text">Upload File</span>
+                </li>
+                <li onclick="refreshFolder()">
+                    <i class="fas fa-sync" style="color: #6B8E23;"></i>
+                    <span class="nav-text">Refresh</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Sticky Header -->
+            <div class="sticky-header">
+                <div class="project-overview">
+                    <h2>Project Overview</h2>
+                    <div class="filter-controls">
+<button class="filter-btn active" data-filter="all"><i class="fas fa-project-diagram"></i>&nbsp;Overview (<span class="count-all">4</span>)</button>
+<button class="filter-btn" data-filter="completed"><i class="fas fa-check fa-lg" style="color: green;"></i>&nbsp;Completed (<span class="count-completed">1</span>)</button>
+<button class="filter-btn" data-filter="in-progress"><i class="fas fa-circle-notch"></i>&nbsp;In Progress (<span class="count-in-progress">1</span>)</button>
+<button class="filter-btn" data-filter="planned"><i class="fas fa-calendar"></i>&nbsp;Planned (<span class="count-planned">2</span>)</button>
+<button class="filter-btn" data-filter="assist" style="border-color: var(--alert-red); color: white;"><i class="fas fa-exclamation-triangle"></i>&nbsp;Assist (0)</button>
+<button class="filter-btn" data-filter="history" style="border-color: #808080; color: white;"><i class="fas fa-calendar-alt"></i>&nbsp;History</button>
+                        <button class="filter-btn" style="border-color: #FFA500; color: white;"><i class="fas fa-lightbulb" style="color: yellow;"></i>&nbsp;Ideas</button>
+                    </div>
+                    <p>VibeFlow is an AI-assisted project management system providing clear oversight and streamlined management of projects across multiple AI platforms, with automated progress tracking and enhanced contextual awareness.</p>
+                </div>
+                
+                <div class="progress-chart">
+                    <div class="bar-container">
+                        <div class="bar-segment segment-completed" style="width: 20%">20%</div>
+                        <div class="bar-segment segment-in-progress" style="width: 30%">30%</div>
+                        <div class="bar-segment segment-planned-independent" style="width: 25%">25%</div>
+                        <div class="bar-segment segment-planned-dependent" style="width: 25%">25%</div>
+                    </div>
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--completed);"></div>
+                        <span>Completed</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--in-progress);"></div>
+                        <span>In Progress</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--planned-independent);"></div>
+                        <span>Planned (Independent)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--planned-dependent);"></div>
+                        <span>Planned (Dependent)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="scrollable-content">
+                <div class="tasks-container">
+                    <div class="task completed">
+                        <div class="task-content">
+                            <span class="task-id">T1</span>
+                            <span class="task-name">Implement Core Architecture</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task in-progress">
+                        <div class="task-content">
+                            <span class="task-id">T2</span>
+                            <span class="task-name">Develop Safety Protocols</span>
+                        </div>
+                    </div>
+
+                    <div class="task planned-independent">
+                        <div class="task-content">
+                            <span class="task-id">T3</span>
+                            <span class="task-name">UI Component Library</span>
+                        </div>
+                    </div>
+
+                    <div class="task planned-dependent">
+                        <div class="task-content">
+                            <span class="task-id">T4</span>
+                            <span class="task-name">API Integration Layer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mermaid-container">
+                    <h3>Project Structure Overview</h3>
+                    <div class="mermaid">
+                        graph TD
+                        classDef completed fill:#4CAF50,color:white;
+                        classDef inProgress fill:#2196F3,color:white;
+                        classDef planned fill:#9C27B0,color:white;
+                        classDef plannedIndependent fill:#800080,color:white;
+                        classDef plannedDependent fill:#4B0082,color:white;
+                        
+                        P1[Phase 1: Core Architecture]
+                        P2[Phase 2: Safety & Validation]
+                        P3[Phase 3: Task Packaging]
+                        P4[Phase 4: UI & Reporting]
+                        P5[Phase 5: GitHub Integration]
+                        
+                        P1 --> P1.1[Task Hierarchy System]
+                        P1 --> P1.2[Context Window Manager]
+                        
+                        P1.1 --> P1.1.1[Nested DOM Structure]
+                        P1.1 --> P1.1.2[CSS Color Variables]
+                        
+                        P1.2 --> P1.2.1[File Watcher]
+                        P1.2 --> P1.2.2[File Token Calculator]
+                        
+                        P2 --> P2.1[Change Control]
+                        P2 --> P2.2[GitHub Integration]
+                        P2 --> P2.3[Backup System]
+                        
+                        P2.1 --> P2.1.1[Attempt Tracker]
+                        P2.1 --> P2.1.2[Status Escalation]
+                        
+                        P2.2 --> P2.2.1[Auto-Commit]
+                        P2.2 --> P2.2.2[Rollback System]
+                        
+                        P2.3 --> P2.3.1[Zip Archiving]
+                        P2.3 --> P2.3.2[7-Day Retention]
+                        
+                        P3 --> P3.1[Task Packaging]
+                        P3 --> P3.1.1[Human Brief]
+                        P3.1 --> P3.1.2[AI Context]
+                        
+                        P3.2 --> P3.2.1[File Manifest Builder]
+                        P3.2 --> P3.2.2[Buffer Calculator]
+                        
+                        P4 --> P4.1[Dashboard 2.0]
+                        P4 --> P4.2[Context Monitor]
+                        
+                        P4.1 --> P4.1.1[Legend System]
+                        P4 --> P4.1.2[Progress Matrix]
+                        
+                        P4.2 --> P4.2.1[Context Window Display]
+                        P4.2 --> P4.2.2[File Preview]
+                        
+                        P5 --> P5.1[Branch Management]
+                        P5 --> P5.2[Pull Request Automation]
+                        P5 --> P5.3[GitHub Status Integration]
+                        
+                        class P1.1.1 inProgress;
+                        class P1.1.2 planned;
+                        class P1.2.1 planned;
+                        class P1.2.2 planned;
+                        class P2.1.1 planned;
+                        class P2.1.2 planned;
+                        class P2.2.1 planned;
+                        class P2.2.2 planned;
+                        class P2.3.1 planned;
+                        class P2.3.2 planned;
+                        class P3.1.1 planned;
+                        class P3.1.2 planned;
+                        class P3.2.1 planned;
+                        class P3.2.2 planned;
+                        class P4.1.1 planned;
+                        class P4.1.2 planned;
+                        class P4.2.1 planned;
+                        class P4.2.2 planned;
+                        class P5.1 planned;
+                        class P5.2 planned;
+                        class P5.3 planned;
+                        
+                        class P1 plannedIndependent;
+                        class P2 plannedDependent;
+                        class P3 plannedDependent;
+                        class P4 plannedDependent;
+                        class P5 plannedDependent;
+                    </div>
+                </div>
+
+                <div class="sample-content">
+                    <h3>Additional Content for Scrolling Test</h3>
+                    <p>Scroll down to test the sticky header. You should see the header remain fixed at the top while this content scrolls beneath it.</p>
+                    <p>The header will also properly adjust when the sidebar is toggled.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const chevron = document.querySelector('.sidebar-toggle i');
+            
+            sidebar.classList.toggle('expanded');
+            
+            if (sidebar.classList.contains('expanded')) {
+                chevron.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            } else {
+                chevron.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            }
+        }
+
+        // Toast Notification
+        function showToast(message, type = 'info', duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.getElementById('toast-container').appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('visible'), 10);
+            setTimeout(() => {
+                toast.classList.remove('visible');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Placeholder functions for sidebar actions
+        function openFolder() {
+            showToast('Open folder functionality would go here', 'info');
+        }
+
+        function openGitHubRepo() {
+            showToast('GitHub repo functionality would go here', 'info');
+        }
+
+        function uploadFile() {
+            showToast('File upload functionality would go here', 'info');
+        }
+
+        function refreshFolder() {
+            showToast('Refresh functionality would go here', 'info');
+        }
+
+        // Initialize task counts
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTaskCounts();
+        });
+
+        function updateTaskCounts() {
+            const counts = {
+                all: document.querySelectorAll('.task').length,
+                completed: document.querySelectorAll('.task.completed').length,
+                inProgress: document.querySelectorAll('.task.in-progress').length,
+                planned: document.querySelectorAll('.task[class*="planned"]').length
+            };
+
+            document.querySelector('.count-all').textContent = counts.all;
+            document.querySelector('.count-completed').textContent = counts.completed;
+            document.querySelector('.count-in-progress').textContent = counts.inProgress;
+            document.querySelector('.count-planned').textContent = counts.planned;
+        }
+    </script>
+</body>
+</html>

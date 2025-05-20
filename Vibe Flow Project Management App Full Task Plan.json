@@ -1,0 +1,436 @@
+{
+  "tasks": [
+    {
+      "name": "Core Architecture & Setup",
+      "subtasks": [
+        {
+          "name": "Supabase Integration",
+          "prompt": "TASK_ID: P1.1.1\nACTION: Set up Supabase project, configure authentication (including social providers), and define database schema for users, projects, tasks, and related data.\nCONTEXT: Project requirements for user management and data persistence. Supabase documentation for authentication and database setup.\nOUTPUT_FORMAT: Supabase setup scripts, configuration files, and database schema definitions.\nREPORTING: { \"task_id\": \"P1.1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"supabase_setup.sql\", \"supabase_config.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Project Directory Structure",
+          "prompt": "TASK_ID: P1.1.2\nACTION: Define the initial project directory structure, including folders for:\nSource code (e.g., /src)\nVersioned backups (e.g., /backups)\nTask files (e.g., /tasks)\nConfiguration files\nDocumentation\nCONTEXT: Project requirements for file organization and maintainability.\nOUTPUT_FORMAT: Documentation outlining the directory structure.\nREPORTING: { \"task_id\": \"P1.1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"project_structure.md\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "GitHub Repository Setup",
+          "prompt": "TASK_ID: P1.1.3\nACTION: Create a GitHub repository for the project and configure initial settings.\nCONTEXT: Project requirements for version control and collaboration.\nOUTPUT_FORMAT: GitHub repository URL and initial configuration settings.\nREPORTING: { \"task_id\": \"P1.1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"repo_url.txt\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        }
+      ]
+    },
+    {
+      "name": "Task Management",
+      "subtasks": [
+        {
+          "name": "Design Task Data Structure (JSON)",
+          "prompt": "TASK_ID: P2.1.1\nACTION: Define the JSON schema for tasks, including attributes like:\ntask_id (unique identifier)\ntitle\ndescription\nstatus\ndependencies (array of task_ids)\npriority (high, medium, low)\nprompt (AI prompt used)\noutput_files (array of file paths)\nai_model (name of AI model used)\nchat_url (URL of specific AI chat/context)\nCONTEXT: Project requirements for task management and data storage.\nOUTPUT_FORMAT: JSON schema definition (e.g., `task_schema.json`).\nREPORTING: { \"task_id\": \"P2.1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_schema.json\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Implement Task Creation Function",
+          "prompt": "TASK_ID: P2.1.2\nACTION: Create a function to add new tasks to the system, ensuring unique IDs and proper data storage (in JSON files and/or Supabase).\nCONTEXT: Task schema (P2.1.1), Supabase integration (P1.1.1).\nOUTPUT_FORMAT: Code for task creation function.\nREPORTING: { \"task_id\": \"P2.1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_management.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Implement Task Dependency Tracking",
+          "prompt": "TASK_ID: P2.1.3\nACTION: Develop mechanisms to define and manage task dependencies, including storing and retrieving dependency relationships.\nCONTEXT: Task schema (P2.1.1).\nOUTPUT_FORMAT: Code for dependency management.\nREPORTING: { \"task_id\": \"P2.1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_management.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Implement Task Status Updates",
+          "prompt": "TASK_ID: P2.1.4\nACTION: Create functions to modify task status, ensuring status changes are reflected in the data and UI.\nCONTEXT: Task schema (P2.1.1).\nOUTPUT_FORMAT: Code for status update functions.\nREPORTING: { \"task_id\": \"P2.1.4\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_management.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        }
+      ]
+    },
+    {
+      "name": "UI/UX Development",
+      "subtasks": [
+        {
+          "name": "Design Task Display Component",
+          "prompt": "TASK_ID: UI1.1\nACTION: Design the UI component for displaying tasks, including visual cues for status, priority, and dependencies. Include:\nColor-coded task status\nFilters\nTask elements with \"expand,\" \"prompt,\" and \"file\" icons.\nCONTEXT: Task Master UI Analysis document, project's design guidelines.\nOUTPUT_FORMAT: UI component code (HTML/CSS/JS).\nREPORTING: { \"task_id\": \"UI1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_display.html\", \"task_display.css\", \"task_display.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Implement Task Details and Interaction",
+          "prompt": "TASK_ID: UI1.2\nACTION: Develop the task detail view with task information, AI outputs, \"OK,\" and \"Edit/Feedback\" buttons. Implement the actions for these buttons, including backup creation on \"OK\" and triggering the feedback loop on \"Edit.\" Include display of chat_url.\nCONTEXT: Project requirements for task review and iteration.\nOUTPUT_FORMAT: UI component code and backend logic.\nREPORTING: { \"task_id\": \"UI1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_details.html\", \"task_details.js\", \"task_interaction.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Integrate Natural Language Input",
+          "prompt": "TASK_ID: UI1.3\nACTION: Implement a mechanism for users to manage tasks using natural language, interpreting commands.\nCONTEXT: Project's \"vibe coding\" paradigm.\nOUTPUT_FORMAT: Code for natural language processing and task management.\nREPORTING: { \"task_id\": \"UI1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"natural_language_task.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        }
+      ]
+    },
+    {
+      "name": "AI Integration",
+      "subtasks": [
+        {
+          "name": "Implement AI Output Evaluation Rubrics",
+          "prompt": "TASK_ID: A1.1\nACTION: Code the rubrics defined earlier to automatically or semi-automatically evaluate AI-generated outputs.\nCONTEXT: Project requirements for AI output quality.\nOUTPUT_FORMAT: Code for AI output evaluation.\nREPORTING: { \"task_id\": \"A1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"ai_evaluation.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Design User Feedback Interface",
+          "prompt": "TASK_ID: A1.2\nACTION: Create UI elements within the task detail view to allow users to provide structured feedback for AI revisions.\nCONTEXT: UI/UX design (UI1.2).\nOUTPUT_FORMAT: UI component code.\nREPORTING: { \"task_id\": \"A1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"feedback_ui.html\", \"feedback_ui.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Implement Iterative Refinement Workflow",
+          "prompt": "TASK_ID: A1.3\nACTION: Develop the backend logic to handle the feedback loop, re-invoking the AI with user feedback and updating the task status.\nCONTEXT: AI feedback loop process.\nOUTPUT_FORMAT: Code for feedback loop management.\nREPORTING: { \"task_id\": \"A1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"feedback_loop.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        }
+      ]
+    },
+    {
+      "name": "Agent Integration",
+      "subtasks": [
+        {
+          "name": "Implement Agent Orchestration",
+          "prompt": "TASK_ID: P8.1\nACTION: Use the OpenAI Agent SDK (or similar) to create an orchestration agent that manages task delegation, monitors progress, and integrates results.\nCONTEXT: Project's architecture for AI agents.\nOUTPUT_FORMAT: Code for agent orchestration.\nREPORTING: { \"task_id\": \"P8.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"agent_orchestration.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        },
+        {
+          "name": "Implement Task Execution Agents",
+          "prompt": "TASK_ID: P8.2\nACTION: Develop specialized AI agents for different task types, ensuring they can receive instructions from the orchestration agent and produce the required outputs.\nCONTEXT: Project's architecture for AI agents, task types.\nOUTPUT_FORMAT: Code for task execution agents.\nREPORTING: { \"task_id\": \"P8.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"code_agent.js\", \"docs_agent.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        }
+      ]
+    },
+    {
+      "name": "Version Control and Safety",
+      "subtasks": [
+        {
+          "name": "Loop Prevention / File Guardian",
+          "subtasks": [
+            {
+              "name": "Attempt Tracker / Read-Only Lock",
+              "prompt": "TASK_ID: P2.1.1\nACTION: Implement mechanisms to track modification attempts on files and apply read-only locks to prevent infinite loops. Trigger versioned backup before allowing modification.\nCONTEXT: Project's safety requirements, file versioning (P2.3).\nOUTPUT_FORMAT: Code for loop prevention.\nREPORTING: { \"task_id\": \"P2.1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"loop_prevention.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Status Escalation / Change Detection",
+              "prompt": "TASK_ID: P2.1.2\nACTION: Implement change detection (e.g., using file hashing) to identify modifications. Escalate task status or trigger alerts based on detected changes. Link to versioned backups.\nCONTEXT: Project's safety requirements, file versioning (P2.3).\nOUTPUT_FORMAT: Code for change detection.\nREPORTING: { \"task_id\": \"P2.1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"change_detection.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        },
+        {
+          "name": "GitHub Integration / Task Archaeology",
+          "subtasks": [
+            {
+              "name": "Auto-Commit",
+              "prompt": "TASK_ID: P2.2.1\nACTION: Implement automatic commit of versioned files or changes to the GitHub repository.\nCONTEXT: GitHub API, versioned files.\nOUTPUT_FORMAT: Code for GitHub integration.\nREPORTING: { \"task_id\": \"P2.2.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"github_integration.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Rollback System / Backups",
+              "prompt": "TASK_ID: P2.2.2\nACTION: Implement rollback functionality using Git history and the file-based versioning system. Provide a mechanism to restore a file to a previous version based on task ID and timestamp.\nCONTEXT: GitHub integration (P2.2.1), file versioning.\nOUTPUT_FORMAT: Code for rollback functionality.\nREPORTING: { \"task_id\": \"P2.2.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"rollback.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        },
+        {
+          "name": "Backup System",
+          "subtasks": [
+            {
+              "name": "File Versioning",
+              "prompt": "TASK_ID: P2.3.1\nACTION: Implement functionality to create timestamped, versioned copies of files before they are modified by a task. Triggered by the File Guardian (P2.1) before allowing file write access for a task. Naming convention: [original_filename][task_id][timestamp].[ext]. Store versions in a designated backup directory (e.g., './backups/').\nCONTEXT: Project's safety requirements.\nOUTPUT_FORMAT: Code for file versioning.\nREPORTING: { \"task_id\": \"P2.3.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"file_versioning.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Backup Retention Policy (Modified)",
+              "prompt": "TASK_ID: P2.3.2\nACTION: Ensure backup retention is handled by manual cleanup trigger (Task M1), not automatic time-based deletion. Remove any 7-day auto-delete logic.\nCONTEXT: File versioning (P2.3.1), Manual Backup Cleanup (M1).\nOUTPUT_FORMAT: Code modifications reflecting removal of auto-delete logic.\nREPORTING: { \"task_id\": \"P2.3.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"backup_retention.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Task Packaging",
+      "subtasks": [
+        {
+          "name": "Export System",
+          "subtasks": [
+            {
+              "name": "Task Packaging / Template Engine",
+              "subtasks": [
+                {
+                  "name": "Human Brief / Brief Generator",
+                  "prompt": "TASK_ID: P3.1.1\nACTION: Generate human-readable task briefs in markdown format.\nCONTEXT: Task data structure (P2.1).\nOUTPUT_FORMAT: Code for generating task briefs.\nREPORTING: { \"task_id\": \"P3.1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"brief_generator.js\", \"task.md\"] }",
+                  "promptTokens": 0,
+                  "relatedFiles": [],
+                  "subtasks": []
+                },
+                {
+                  "name": "AI Context / AI Context Generator",
+                  "prompt": "TASK_ID: P3.1.2\nACTION: Create a template and generator for AI-specific context bundles (ai-context.md or .txt). Include task requirements, relevant code snippets, references to specific versioned input files, file manifests, token reports, and expected output format description. Ensure output is plain text or markdown suitable for pasting or file attachment.\nCONTEXT: Task data structure (P2.1), file versioning (P2.3), token audit (P3.2).\nOUTPUT_FORMAT: Template file(s) and generator script.\nREPORTING: { \"task_id\": \"P3.1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"ai_context_generator.js\", \"ai_context.md\"] }",
+                  "promptTokens": 0,
+                  "relatedFiles": [],
+                  "subtasks": []
+                }
+              ]
+            },
+            {
+              "name": "Token Audit",
+              "prompt": "TASK_ID: P3.2\nACTION: Audit file tokens and build file manifests to include minimal code snippets.\nCONTEXT: AI processing constraints, file handling.\nOUTPUT_FORMAT: Code for token auditing and file manifest generation.\nREPORTING: { \"task_id\": \"P3.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"token_audit.js\", \"file_manifest.json\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "AI Feedback Loop Orchestration",
+              "prompt": "TASK_ID: P3.3\nACTION: Implement the backend logic for the AI feedback loop triggered by the \"Request Edit\" action.\nCONTEXT: User feedback, task data, AI communication.\nOUTPUT_FORMAT: Code for managing the AI feedback loop.\nREPORTING: { \"task_id\": \"P3.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"feedback_orchestration.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Enhanced Dashboard and Monitoring",
+      "subtasks": [
+        {
+          "name": "Enhance the dashboard and monitoring system",
+          "subtasks": [
+            {
+              "name": "Develop an interactive legend and progress matrix",
+              "prompt": "TASK_ID: P4.1\nACTION: Develop UI components for an interactive legend explaining task statuses, priorities, and dependencies, and a progress matrix visualizing overall project progress.\nCONTEXT: UI/UX design, task data.\nOUTPUT_FORMAT: UI components (HTML/CSS/JS).\nREPORTING: { \"task_id\": \"P4.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"dashboard_legend.html\", \"dashboard_progress.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Implement context monitors with enhanced file preview",
+              "prompt": "TASK_ID: P4.2\nACTION: Implement UI elements to monitor task context (e.g., file dependencies) and provide enhanced file previews, including live iframe previews for web outputs.\nCONTEXT: UI/UX design, file handling, web output preview.\nOUTPUT_FORMAT: UI components (HTML/CSS/JS).\nREPORTING: { \"task_id\": \"P4.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"context_monitor.js\", \"file_preview.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Implement Review Process",
+              "prompt": "TASK_ID: P4.3\nACTION: Integrate \"Approve\"/\"Request Edit\" buttons and a feedback text area for human-in-the-loop review of AI-generated outputs.\nCONTEXT: UI/UX design, AI feedback loop.\nOUTPUT_FORMAT: UI components and backend logic for review process.\nREPORTING: { \"task_id\": \"P4.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"review_ui.js\", \"review_logic.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "External Integrations",
+      "subtasks": [
+        {
+          "name": "External Playground Automation",
+          "subtasks": [
+            {
+              "name": "Playground Interface Definitions",
+              "prompt": "TASK_ID: P7.1\nACTION: Define clear interfaces for interacting with various external AI playgrounds (APIs or web UI automation).\nCONTEXT: List of target AI playgrounds.\nOUTPUT_FORMAT: Interface definitions or API specifications.\nREPORTING: { \"task_id\": \"P7.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"playground_interfaces.md\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Output Extraction Modules",
+              "prompt": "TASK_ID: P7.2\nACTION: Develop modules to reliably extract AI-generated outputs from the defined playground interfaces.\nCONTEXT: Playground interface definitions (P7.1).\nOUTPUT_FORMAT: Code for output extraction.\nREPORTING: { \"task_id\": \"P7.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"output_extraction.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Parallel Task Orchestration",
+              "prompt": "TASK_ID: P7.3\nACTION: Implement logic within the TaskMaster to manage multiple browser instances or tabs concurrently, send tasks from the queue (P1.1) to available automation slots, handle asynchronous results, and update task statuses upon completion or error.\nCONTEXT: Task queue (P1.1), automation slots, error handling.\nOUTPUT_FORMAT: Code for parallel task orchestration.\nREPORTING: { \"task_id\": \"P7.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"task_orchestration.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Integrate Automation with Packaging",
+              "prompt": "TASK_ID: P7.4\nACTION: Connect the output of Task Packaging (P3) to the input of the Automation Layer (P7). The orchestrator (P7.3) picks up packaged tasks ready for execution.\nCONTEXT: Task packaging (P3), automation layer (P7).\nOUTPUT_FORMAT: Integration code.\nREPORTING: { \"task_id\": \"P7.4\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"automation_integration.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Implement Result Integration & Persistence",
+              "prompt": "TASK_ID: P7.5\nACTION: Once output is extracted (P7.2), this task involves: Pasting/writing the result into the correct local project file, updating GitHub with the changes, creating a backup in the designated folder, and storing the chat_url.\nCONTEXT: Output extraction (P7.2), local file system, GitHub API, backup system (P2.3), AI chat context.\nOUTPUT_FORMAT: Code for result integration and persistence.\nREPORTING: { \"task_id\": \"P7.5\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"result_integration.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        },
+        {
+          "name": "MCP Server / External API",
+          "subtasks": [
+            {
+              "name": "Define API Specification",
+              "prompt": "TASK_ID: P6.1\nACTION: Define the API endpoints, data formats, and authentication methods for external tools (e.g., VS Code extensions) to interact with the application. Use OpenAPI specifications.\nCONTEXT: Project requirements for external tool integration.\nOUTPUT_FORMAT: OpenAPI specification file (e.g., `openapi.yaml`).\nREPORTING: { \"task_id\": \"P6.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"openapi.yaml\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Implement API Endpoints",
+              "prompt": "TASK_ID: P6.2\nACTION: Develop the backend logic to handle API requests for querying, updating, and triggering task processing.\nCONTEXT: API specification (P6.1), application logic.\nOUTPUT_FORMAT: Code for API endpoints.\nREPORTING: { \"task_id\": \"P6.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"api_endpoints.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        },
+        {
+          "name": "Google Drive Integration",
+          "prompt": "TASK_ID: M8\nACTION: Implement integration with the Google Drive API to upload final outputs or backups. Integrate with the configuration management system.\nCONTEXT: Google Drive API documentation, backup system.\nOUTPUT_FORMAT: Code for Google Drive integration.\nREPORTING: { \"task_id\": \"M8\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"google_drive_integration.js\"] }",
+          "promptTokens": 0,
+          "relatedFiles": [],
+          "subtasks": []
+        }
+      ]
+    },
+    {
+      "name": "Error Handling, Logging, and Testing",
+      "subtasks": [
+        {
+          "name": "Implement Error Handling and Logging",
+          "subtasks": [
+            {
+              "name": "Implement Centralized Logging Mechanism",
+              "prompt": "TASK_ID: EH1.1\nACTION: Develop a logging system to record application events, errors, and AI interactions.\nCONTEXT: Project requirements for error tracking and debugging.\nOUTPUT_FORMAT: Code for logging mechanism.\nREPORTING: { \"task_id\": \"EH1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"logging.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Define Error Handling Strategies for AI Interactions",
+              "prompt": "TASK_ID: EH1.2\nACTION: Implement strategies for handling errors that occur during communication with AI agents, including retries, fallback mechanisms, and user notifications.\nCONTEXT: AI communication protocols, error handling best practices.\nOUTPUT_FORMAT: Code for AI error handling.\nREPORTING: { \"task_id\": \"EH1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"ai_error_handling.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Develop User-Friendly Error Messages",
+              "prompt": "TASK_ID: EH1.3\nACTION: Design clear and informative error messages to guide users in troubleshooting issues.\nCONTEXT: UI/UX design, error handling.\nOUTPUT_FORMAT: Error message definitions.\nREPORTING: { \"task_id\": \"EH1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"error_messages.json\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        },
+        {
+          "name": "Implement Testing",
+          "subtasks": [
+            {
+              "name": "Implement Unit Tests",
+              "prompt": "TASK_ID: T1.1\nACTION: Write unit tests for individual components and functions.\nCONTEXT: Project's testing strategy.\nOUTPUT_FORMAT: Unit tests.\nREPORTING: { \"task_id\": \"T1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"unit_tests.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Implement Integration Tests",
+              "prompt": "TASK_ID: T1.2\nACTION: Write integration tests to ensure different components work together correctly.\nCONTEXT: Project's testing strategy.\nOUTPUT_FORMAT: Integration tests.\nREPORTING: { \"task_id\": \"T1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"integration_tests.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Implement End-to-End Tests",
+              "prompt": "TASK_ID: T1.3\nACTION: Write end-to-end tests to validate the entire application workflow.\nCONTEXT: Project's testing strategy.\nOUTPUT_FORMAT: End-to-end tests.\nREPORTING: { \"task_id\": \"T1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"e2e_tests.js\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Documentation",
+      "subtasks": [
+        {
+          "name": "Implement Documentation",
+          "subtasks": [
+            {
+              "name": "Create API Documentation",
+              "prompt": "TASK_ID: DC1.1\nACTION: Generate API documentation for external developers using the API (Phase 6).\nCONTEXT: API specification (P6.1).\nOUTPUT_FORMAT: API documentation.\nREPORTING: { \"task_id\": \"DC1.1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"api_documentation.md\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Develop User Guides and Tutorials",
+              "prompt": "TASK_ID: DC1.2\nACTION: Create user guides and tutorials to help users understand and use the application.\nCONTEXT: Application features and workflows.\nOUTPUT_FORMAT: User documentation.\nREPORTING: { \"task_id\": \"DC1.2\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"user_guide.md\", \"tutorials.md\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            },
+            {
+              "name": "Document the System Architecture and Design",
+              "prompt": "TASK_ID: DC1.3\nACTION: Document the system architecture, design decisions, and implementation details.\nCONTEXT: Project's architecture and design documents.\nOUTPUT_FORMAT: System documentation.\nREPORTING: { \"task_id\": \"DC1.3\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"system_architecture.md\"] }",
+              "promptTokens": 0,
+              "relatedFiles": [],
+              "subtasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Manual Backup Cleanup (New)",
+      "prompt": "TASK_ID: M1\nACTION: Implement UI controls and backend logic for manual cleanup of versioned backup files.\nCONTEXT: File versioning (P2.3), UI/UX design.\nOUTPUT_FORMAT: UI components and backend logic for cleanup.\nREPORTING: { \"task_id\": \"M1\", \"status\": \"Complete\", \"model_name\": \"[AI Model Name]\", \"output_files\": [\"backup_cleanup_ui.js\", \"backup_cleanup.js\"] }",
+      "promptTokens": 0,
+      "relatedFiles": [],
+      "subtasks": []
+    }
+  ]
+}

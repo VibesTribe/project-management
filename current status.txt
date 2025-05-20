@@ -1,0 +1,53 @@
+Project Goal: To create an AI-powered project management system that streamlines the process of human oversight of LLM coders.
+
+Key Features:
+* Easy Visual Overview: A clear Mermaid diagram displaying task status (completed, in progress, planned, red for failed).
+* Easy Task Download: A "Download Task" button that generates a text file with task details and related files.
+* Automatic Updates: Automatic updates to the memory bank and visual overview upon uploading new/edited files and providing the "update" instruction.
+* Automatic Task Completion: Automatic task completion based on file review.
+* Automatic Red Task Marking: Automatic marking of tasks as "red" after three failed attempts.
+
+Plan of Action:
+1. Dynamic Nesting: Implement a recursive function to handle the dynamic nesting of subtasks and sub-subtasks in the `tasks` object.
+2. Automatic Updates:
+    * Cline Updates: Implement a file watcher for the memory bank files (`activeContext.md`, `progress.md`, `projectbrief.md`, etc.).
+    * LLM Updates: Implement a file watcher for the project folder.
+    * "Update Memory Bank" Command: Implement a function that is called when the user says "update memory bank".
+3. Click Indication: Add a CSS class to the clicked task or section in the Mermaid diagram to highlight it with a distinct color.
+4. Task Download Button:
+    * Concise Description: Include a concise description of the task in the download file.
+    * Required Files: Include a list of required files to be edited or created in the download file.
+    * Download Links: Provide download links for any existing relevant files from the project folder in the download file.
+5. Fix Non-Functional Download Button: The "Download Task Details" button in the task management section should download the same information as the download button in the Mermaid diagram.
+6. Implement Click Indication: Add a CSS class to the clicked task or subtask to highlight it.
+7. Implement Subtask Display: Ensure that the subtasks and their status (completed, in progress, planned) are displayed when a task is clicked.
+8. Implement Task Download Button: Add a download button beside each task and subtask that will generate a text file with the task outline and related existing files.
+
+Current Task: Implementing Click Indication, Subtask Display, and Task Download Button.
+
+I have attempted to implement the automatic red task marking solution provided by Claude, but I am unable to correct the CSS in `visual-overview.html` using the available tools. I recommend flagging this task as red and seeking assistance from another resource.
+
+New Plan:
+1. Re-implement JavaScript Functions:
+    - I'll carefully re-implement the JavaScript functions for the core features that are currently broken.
+    - This includes the functions for toggling phase and task visibility, filtering tasks, displaying task details, downloading task information, and handling file uploads.
+
+2. Verify Task Data:
+    - I'll double-check the task data to ensure it's correctly structured and that all tasks and subtasks are properly defined.
+    - This will help ensure that the filtering and display functions work as expected.
+
+3. Test Each Functionality:
+    - After re-implementing the JavaScript functions, I'll thoroughly test each feature to ensure it's working correctly.
+    - This includes testing the expand/collapse functionality, filtering, task details display, download functionality, and file upload.
+
+4. Add Upload Folder Option:
+    - I'll add the functionality to upload a folder and view its contents in the side column.
+    - This will involve adding a new button to the sidebar and implementing the necessary JavaScript code to handle folder uploads and display the folder contents.
+
+5. Address Overlapping Frame Issue:
+    - I'll review the CSS to ensure that the task details panel is not overlapping the task list.
+    - I'll adjust the CSS as needed to ensure that the task details panel is displayed correctly.
+
+6. Test and Refine:
+    - After implementing all the fixes, I'll thoroughly test the visual-overview.html file to ensure that all the features are working as expected and that the display is clean and intuitive.
+    - I'll refine the implementation as needed based on your feedback.

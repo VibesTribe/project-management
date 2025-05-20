@@ -1,0 +1,514 @@
+Overview
+The project is an AI‐driven project management and code modification assistant designed to break down large tasks into very small, easily executable units. Its goals are to (1) manage and validate task outputs from various AI models running in external web playgrounds, (2) allow human review and iterative refinement, (3) maintain a clean project history with versioned backups, and (4) provide integration both internally (via an AI service layer) and externally (via IDE plugins and web playground automation). Importantly, the system will use an open‑source agent SDK (instead of proprietary APIs) so that it can quickly support new models (e.g., Qwen, Gemini, Phi‑3/4, etc.) and run parallel tasks for free.
+
+Architecture & Core Components
+Vertical Slices & Task Hierarchy
+
+Phases as Vertical Slices: Each major feature (e.g., core architecture, safety, packaging, UI, GitHub integration) is built as a vertical slice.
+
+TaskMaster Orchestration: A central orchestrator manages task delegation, tracks updates, and routes tasks to the appropriate internal agent or external automation module.
+
+Boomerang Tasks: Atomic tasks (and micro‑tasks) are delegated to specialized agents that operate in isolated contexts and return results for integration.
+
+Core Agent Integration
+
+Open‑Source Agent SDK: Use an agent framework that supports atomic agents with built‑in “computer use” tools (for code execution, static analysis, etc.). This enables model flexibility and platform agnosticism.
+
+Internal “AI Service Layer”: Rather than relying solely on web‑UI automation, an internal layer manages agent threads, context file uploads, and response handling. This layer is used for:
+
+Subtask Suggestion (Task M2): An agent analyzes a task’s description, file context, and token estimates to propose granular subtasks that minimize context.
+
+Task Packaging (Task P3): Prompts are generated to include only the essential context, clear instructions, and output requirements. (For example, include the exact code snippet or configuration block, along with a header that identifies the task name, ID, and executing model.)
+
+Feedback Loop (Task P3.3): When human reviewers flag outputs for edits, the system appends feedback to the existing agent thread for re‑processing.
+
+Version Control & Backup
+
+File Versioning: Instead of ZIP backups, every file that’s modified is first saved with a versioned name:
+[original_filename]_[task_id]_[timestamp].[ext]
+
+Manual Cleanup (Task M1): A UI and backend process lets the user review and manually delete old versions, ensuring that the last two approved versions remain available.
+
+Configuration & Safety
+
+Configuration Management (Task M3): A dedicated task/system that securely manages:
+
+API keys (if any are used in integrations)
+
+Default model/agent settings and Assistant IDs
+
+Paths such as backup directories and protected file lists (used in File Guardian tasks)
+
+Change Control & Rollback: Tasks in Phase 2 ensure that any code modifications are tracked, auto‑committed (via Git integration), and that a rollback mechanism is in place.
+
+GitHub Branch Protection: A sub‑task explicitly sets up branch protection rules through API calls or configuration changes.
+
+UI & Reporting
+
+Dashboard (Phase 4): A real‑time dashboard shows task statuses, token usage, and offers filters for “Requires Review” outputs.
+
+Enhanced File Preview: In addition to static code previews, the UI attempts to render outputs (e.g., HTML/CSS/JS) live in sandboxed iframes when possible.
+
+Review Workflow:
+
+Flagging: Tasks that return outputs from AI agents are flagged as “Requires Review” if the system (or agent confidence) indicates that human inspection is needed.
+
+Interactive Review: The human reviewer sees the AI output (with a live preview where applicable) and chooses “Approve” or “Request Edit”. If “Request Edit” is selected, feedback is recorded and sent back into the agent thread (via Task P3.3) to generate a revised output.
+
+External Integration
+
+Phase 7 (Optional/Deferred): External Playground Automation
+Although the internal AI Service Layer is the primary driver, Phase 7 remains as an optional extension to support platforms that lack robust APIs. Its potential roles:
+
+Interact with AI platforms (beyond those accessible via the agent SDK) by automating browser tasks (using frameworks like Playwright or Puppeteer).
+
+Run parallel tasks in external web playgrounds, then paste outputs back into the local system.
+
+MCP Server / API (Phase 6): A future phase where the project management app exposes its functionality via an API (using an OpenAPI‑style specification), enabling external tools (e.g., VS Code extensions) to query, update, and trigger task processing.
+
+Google Drive Integration (Task M8)
+
+Backups & Persistence: Final outputs or backups can be uploaded to Google Drive using its API. This task integrates with the configuration management (M3) and follows security protocols (OAuth 2.0).
+
+Additional Supporting Tasks
+
+Automated Testing & QA (Task M4): Explicit tasks for unit testing, integration testing, and end‑to‑end tests of all core modules.
+
+Error Handling & Logging (Task M5): A centralized logging mechanism that captures errors (Node.js, UI exceptions, etc.) and presents them on the dashboard.
+
+Deployment & Setup (Task M6): Scripts and documentation for deploying the application in a production‑like environment.
+
+User Documentation & Onboarding (Task M7): Clear, concise documentation and in‑app guides to help users understand how to operate the system effectively.
+
+Detailed Phase Breakdown
+Phase 1: Core Architecture
+Task P1: Set up the overall system blueprint, including the task hierarchy and basic UI components.
+
+Task P1.1: Develop the task hierarchy system and UI (HTML/CSS/JS) to support unlimited nested tasks.
+
+Task P1.2: Implement the Context Window Manager with a file token calculator that calculates context based on file content.
+
+Phase 2: Safety & Version Control
+Task P2: Design the change control and rollback system.
+
+Task P2.1: Implement file guardians (e.g., read‑only locks, strike counters) with file hashing.
+
+Task P2.2: Integrate GitHub auto‑commit features and rollback mechanisms, including branch protection.
+
+Task P2.3: Create a file versioning system (backups with versioned filenames) and later manage retention via manual cleanup (Task M1).
+
+Phase 3: Task Packaging & AI Interaction
+Task P3: Develop the Export System to package tasks as plain text/markdown prompts for the AI Service Layer.
+
+Sub-task P3.1: Create template engines for both human briefs and AI context bundles.
+
+Sub-task P3.2: Audit file tokens and build file manifests to include minimal code snippets.
+
+Task P3.3: Build the feedback loop mechanism to re-invoke agents with user-provided feedback for revisions.
+
+Phase 4: UI, Reporting & Review Workflow
+Task P4: Enhance the dashboard and monitoring system.
+
+Sub-task P4.1: Develop an interactive legend and progress matrix.
+
+Sub-task P4.2: Implement context monitors with enhanced file preview (including live iframe previews for web outputs).
+
+Review Process: Integrate “Approve”/“Request Edit” buttons and a feedback text area for human-in-the-loop review.
+
+Phase 5: GitHub Integration & Advanced Configuration
+Task P5: Implement GitHub authentication, commit management, and explicit branch protection.
+
+Task M3: Create the configuration management system to securely handle API keys, backup paths, and agent settings.
+
+Phase 6: External API & MCP Server (Future Extension)
+Task P6: Define and implement an API layer for external tools (e.g., VS Code extensions) to interact with the project planner.
+
+Task M8: Integrate Google Drive for backups and final output persistence.
+
+Phase 7: External Playground Automation (Optional/Deferred)
+Task P7: Automate interaction with external web AI playgrounds:
+
+Sub-task P7.1: Set up the automation framework.
+
+Sub-task P7.2: Develop playground-specific modules for prompt submission and result extraction.
+
+Sub-task P7.3: Orchestrate parallel execution of tasks across multiple browser instances.
+
+Sub-task P7.4: Integrate the outputs with local file updates, Git commits, and backups.
+
+Additional Supporting Tasks (M4–M7)
+Task M4: Build automated testing and QA suites.
+
+Task M5: Implement a comprehensive error handling and logging system.
+
+Task M6: Develop deployment scripts and setup documentation.
+
+Task M7: Produce user documentation and onboarding guides.
+
+Task M2: Automatic Subtask Suggestion (Enhanced for Minimal Context)
+Objective: Break down any large task into the smallest, most focused subtasks.
+
+Process:
+
+Analyze the main task description, token estimates, and required file context.
+
+Propose subtasks that target individual functions, classes, or code blocks.
+
+Only flag tasks for “External Execution” (i.e., full project context via IDE) if even aggressive subtasking fails to isolate the necessary context.
+
+Integration: Use the internal AI Service Layer to generate these suggestions.
+
+Final Considerations
+Human-in-the-Loop Review: Every AI-generated output is first flagged for review. The task manager (or dashboard) provides a clear interface for human reviewers to test, validate, and approve the outputs or request revisions.
+
+Internal vs. External Execution: While the system is designed to automatically process tasks via external AI playgrounds when needed, the internal AI Service Layer (using the open‑source agent SDK) is preferred to keep context minimal and costs low.
+
+Platform Agnosticism: The entire design ensures that new LLMs can be integrated within minutes, keeping the system flexible and free from vendor lock‑in.
+
+This comprehensive plan now includes all major phases—from core architecture through safety, packaging, UI, GitHub and external integration—with additional support tasks for testing, logging, deployment, and user documentation. It also incorporates robust validation and human review mechanisms to ensure that each task output is functional and reliable before integration.
+
+Overview
+The goal is to maximize efficiency by using external AI playgrounds for executing tasks in parallel. The project management system:
+
+Breaks large tasks into atomic, minimal-context subtasks.
+
+Packages each task for external submission, ensuring clear output formats that include task identifiers, model names, and expected outputs.
+
+Collects and validates results before integrating them into the local project (via Git updates and versioned backups).
+
+Provides a human‑in‑the‑loop review process to catch issues before any changes are committed.
+
+Architecture & Core Components
+1. Task Orchestration & Management
+TaskMaster: A central orchestrator that maintains the task hierarchy (vertical slices, phases, subtasks) and tracks status updates via a log (e.g., task_updates.log).
+
+Boomerang Tasks: Atomic tasks that are generated from large tasks, ensuring that each unit of work is small, focused, and includes only the necessary context.
+
+2. External Execution via Web-Based AI Playgrounds
+Task Packaging (Phase 3):
+
+Export System: Packages tasks as plain text or markdown prompts. Each package contains the minimal required code snippet or configuration context, a clear set of instructions, and output formatting requirements.
+
+Clear Identification: Each packaged task includes a header (task name, ID, and intended AI model/studio) so that when the task is submitted externally, the output is easily matched back to the project.
+
+External Automation (Phase 7):
+
+Browser Automation Modules:
+
+Developed for each targeted external AI playground, these modules use tools (e.g., Playwright, Puppeteer, Selenium) to open a browser, navigate to the AI studio, paste the task prompt, and trigger execution.
+
+They then capture the resulting output (code or text) along with the required metadata (such as a comment indicating the task ID and model used).
+
+Parallel Execution: The system can manage multiple browser sessions concurrently to maximize throughput across different free-tier platforms.
+
+Flexible Integration: New AI playgrounds can be added quickly by implementing additional automation adapters.
+
+3. Version Control, Safety & Backup
+File Versioning: Before any changes are applied locally, files are backed up with a versioned filename:
+[original_filename]_[task_id]_[timestamp].[ext]
+
+Manual Cleanup (Task M1): A user‑driven process to manage backup files, keeping only the last two approved versions per file.
+
+GitHub Integration (Phase 5):
+
+Auto‑Commit & Rollback: Modified files are auto‑committed, with the ability to roll back using versioned backups.
+
+Branch Protection: Explicit configuration of GitHub branch protection rules to prevent unwanted overwrites.
+
+4. Human‑in‑the‑Loop Review Process
+Dashboard & UI (Phase 4):
+
+Review Interface: Shows tasks flagged as “Requires Review” with live previews (e.g., rendering HTML/CSS/JS in sandboxed iframes) when possible.
+
+Action Buttons: “Approve” (marking the task complete) and “Request Edit” (sending feedback back for revision).
+
+Feedback Loop (Task P3.3):
+
+When a user requests an edit, their feedback is appended to the task context. A new package is then generated and resubmitted to the external playground (manually or via automation) for revision.
+
+5. Configuration & Supporting Infrastructure
+Configuration Management (Task M3):
+
+Securely manages settings such as backup directories, protected file lists, GitHub repository details, and platform-specific parameters.
+
+Error Handling & Logging (Task M5):
+
+A centralized logging system captures errors (both in the browser automation and task integration stages) and displays them on the dashboard.
+
+Automated Testing & Deployment (Tasks M4 & M6):
+
+Tasks for unit/integration testing and scripts/documentation for deploying the project management system.
+
+User Documentation & Onboarding (Task M7):
+
+Guides and in‑app documentation to help users understand how to manage and review tasks, as well as how to initiate external AI submissions.
+
+6. Future Extensions: External API & MCP Server
+MCP Server / API (Phase 6):
+
+In a future phase, expose an API (e.g., using OpenAPI specifications) that allows external tools (such as VS Code extensions) to query, update, and trigger task processing.
+
+This would enable fluid interaction between the project management app and IDE-based environments (like Cline or Roo Code) when more complex tasks require full project context.
+
+Detailed Phase Breakdown
+Phase 1: Core Architecture
+Task P1: Establish the project blueprint and task hierarchy.
+
+Task P1.1: Develop the UI for the task hierarchy (using HTML/CSS/JS).
+
+Task P1.2: Implement a context window manager and file token calculator for determining the minimal necessary context.
+
+Phase 2: Safety & Version Control
+Task P2: Design change control and rollback mechanisms.
+
+Task P2.1: Implement file guardians (read‑only locks, attempt counters) using file hashing.
+
+Task P2.2: Integrate GitHub for auto‑committing changes and enabling rollbacks.
+
+Task P2.3: Establish file versioning and manual backup cleanup (Task M1).
+
+Phase 3: Task Packaging & Feedback Loop
+Task P3: Build the Export System to package tasks as prompts for external AI playgrounds.
+
+Sub-task P3.1: Create template engines for generating human briefs and AI context bundles.
+
+Sub-task P3.2: Audit and include minimal necessary code snippets and token calculations.
+
+Task P3.3: Develop the feedback loop to integrate human feedback and trigger revisions.
+
+Phase 4: UI, Reporting & Review Workflow
+Task P4: Create the dashboard to display task statuses, with filtering for “Requires Review.”
+
+Sub-task P4.1: Develop an interactive legend and progress matrix.
+
+Sub-task P4.2: Enhance file preview with capabilities for live output testing.
+
+Review Process: Enable “Approve” and “Request Edit” actions with associated feedback handling.
+
+Phase 5: GitHub Integration & Advanced Configuration
+Task P5: Implement secure GitHub integration including branch protection.
+
+Task M3: Set up configuration management for paths, protected files, and platform settings.
+
+Phase 6: External API & MCP Server (Future Extension)
+Task P6: Define and implement an API for external tools to interact with the project planner.
+
+Task M8: Integrate Google Drive for additional backup options.
+
+Phase 7: External Playground Automation
+Task P7.1: Select and configure a browser automation framework (e.g., Playwright or Puppeteer).
+
+Task P7.2: Develop modules for each targeted external AI playground:
+
+Handle navigation, login (if needed), prompt submission, and output retrieval.
+
+Task P7.3: Orchestrate parallel execution of tasks across multiple browser sessions.
+
+Task P7.4: Integrate retrieved outputs into the local system (triggering Git auto‑commit and backups).
+
+Additional Supporting Tasks (M4–M7)
+Task M4: Implement automated testing and quality assurance suites.
+
+Task M5: Build robust error handling and centralized logging.
+
+Task M6: Develop deployment scripts and setup documentation.
+
+Task M7: Produce user documentation and onboarding guides.
+
+Task M2: Automatic Subtask Suggestion
+Objective: Automatically break down large tasks into minimal-context subtasks.
+
+Process:
+
+Analyze task descriptions and file context.
+
+Generate atomic subtasks that target specific code blocks or functions.
+
+Only flag tasks for “full project context” (e.g., to be handled in an IDE) if absolutely necessary.
+
+Output: Subtask definitions are added to the hierarchy, ensuring that the vast majority of tasks remain manageable within a minimal context for external AI playground submission.
+
+Final Considerations
+Primary Execution via External Playgrounds:
+The system is designed to orchestrate and package tasks for external AI studios. All code generation and modification occur externally, maximizing efficiency and leveraging free tiers while remaining platform agnostic.
+
+Human Review & Iteration:
+A dedicated review process ensures that outputs are functional and meet requirements before they are integrated into the codebase. This includes live previews and an iterative feedback loop.
+
+Flexibility & Scalability:
+The architecture allows for rapid integration of new LLM platforms as they emerge, without being tied to any single provider.
+
+Task Breakdown & Vertical Slices:
+
+Subtasks/Microtasks: Every large task is aggressively decomposed into atomic subtasks and microtasks using our “Boomerang Task” approach. This ensures that only the minimal context (e.g., a specific code snippet or configuration excerpt) is included in each prompt, avoiding overwhelming the external AI playground.
+
+Dependencies & Priorities: Tasks are numbered (e.g., P1, P1.1, M3) to indicate subtask relationships and dependency order. The phase structure sets the development order: core architecture (Phase 1), safety and version control (Phase 2), packaging and feedback loops (Phase 3), UI and review (Phase 4), GitHub integration (Phase 5), and optional external automation (Phase 7).
+
+Template Format: Each task prompt is a concise template excerpt including a header with task ID, action, minimal context (such as code snippets or configuration details), and a clear expected output. This guarantees consistency and easy review.
+
+Execution via External AI Playgrounds:
+
+Parallel External Submissions: The system is designed to package tasks and send them to external AI playgrounds—leveraging free tiers across multiple platforms—rather than running code generation internally.
+
+Browser Automation Modules: Automation (Phase 7) will open web-based AI studios, paste the packaged task, and extract the output. This ensures rapid, parallel processing while remaining platform‑agnostic.
+
+Version Control & Safety:
+
+File Versioning: Before any changes are applied, files are backed up with versioned filenames (e.g., [filename]_[task_id]_[timestamp].ext) for easy rollback.
+
+Manual Backup Cleanup: A dedicated task (M1) lets users manage backup files, preserving only the most recent two approved versions per file.
+
+GitHub Integration: Auto‑commits and branch protection ensure that only validated changes are merged.
+
+Human‑in‑the‑Loop Review:
+
+Dashboard & Live Previews: A custom dashboard provides a graphic overview of task statuses and progress. Tasks flagged as “Requires Review” are shown with live previews (e.g., rendered HTML/CSS/JS output) for quick testing.
+
+Feedback Loop: Human reviewers can approve outputs or request edits. Feedback is then incorporated into a new task package that’s re‑submitted to the external playground for revision.
+
+Configuration & Support:
+
+Lean Configuration Management (M3): Instead of integrating with heavyweight project management tools, configuration is managed within the app itself—covering backup paths, protected files, GitHub settings, and parameters for external AI platforms.
+
+Error & Quality Management: Clear logging, risk escalation procedures, and built‑in quality rubrics ensure that outputs meet defined criteria without the overhead of scheduling deadlines or enterprise integrations.
+
+MCP Server & API for IDE Integration:
+
+Optional MCP Server: A minimal MCP server lets lightweight tools (like Cline or Roo Code) pull tasks and mark them as complete, ensuring that the system remains highly adaptable for solopreneurs who prefer a DIY, vibe coding approach.
+
+This plan emphasizes a simple, graphic‐rich, and agile project management solution designed specifically for grassroots, low‑budget solopreneurs, and excludes complex integrations with enterprise tools. It combines robust task breakdown, parallel external AI execution, strict safety/version control, and a user-friendly review interface—all tailored to the vibe coding workflow.
+
+Consolidated Summary
+Task Breakdown & Hierarchy
+
+Vertical Slices & Boomerang Tasks:
+
+Large tasks are decomposed into atomic subtasks and microtasks that include minimal context (e.g., code snippets or configuration excerpts) to avoid overloading external AI playgrounds.
+
+Numbering (e.g., P1, P1.1, M3) indicates hierarchy, dependencies, and ordering.
+
+Template Format:
+
+Each task prompt includes a header (with task ID, action, and clear instructions), minimal context excerpts, and expected output format—ensuring consistency and ease of review.
+
+Execution via External AI Playgrounds
+
+External Submission:
+
+The system packages tasks and sends them to external web‑based AI studios (leveraging free tiers) rather than running internal AI code agents.
+
+Browser Automation Modules (Phase 7):
+
+These modules (using frameworks like Playwright/Puppeteer) automatically handle navigation, prompt submission, and output extraction from each external playground.
+
+They support parallel execution so that multiple tasks can be processed concurrently.
+
+Version Control & Safety
+
+File Versioning:
+
+Before any file is modified, it’s backed up using a versioned naming scheme (e.g., [filename]_[task_id]_[timestamp].ext) for easy rollback.
+
+Manual Backup Cleanup (Task M1):
+
+A user-driven process retains only the last two approved versions per file, ensuring that historical backups are available without overwhelming the system.
+
+GitHub Integration:
+
+Auto‑commit features and branch protection ensure that only validated changes are merged into the codebase.
+
+Human‑in‑the‑Loop Review
+
+Dashboard & Live Previews (Phase 4):
+
+A graphical overview of task status is provided, with filters for tasks flagged as “Requires Review.”
+
+Live previews (such as sandboxed iframes for HTML/CSS/JS) help reviewers test outputs quickly.
+
+Feedback Loop (Task P3.3):
+
+Reviewers can approve outputs or request edits. Feedback is integrated back into the system so that tasks are re‑packaged and re‑submitted to external playgrounds for revisions.
+
+Configuration & Supporting Infrastructure
+
+Configuration Management (Task M3):
+
+Manages backup paths, protected file lists, GitHub settings, and parameters for external AI platforms—all within a lean, in‑app configuration system.
+
+Error Handling & Quality Control:
+
+A robust logging and risk management system captures errors and alerts the user for repeated issues.
+
+Quality metrics and rubrics ensure outputs meet predefined standards without relying on enterprise scheduling or complex integrations.
+
+Testing & Documentation:
+
+Automated testing (unit, integration, end‑to‑end) is planned, along with user documentation and onboarding guides tailored for low‑budget, DIY vibe coders.
+
+MCP Server / External API (Future Extension)
+
+API for IDE Integration:
+
+A minimal MCP server or API layer is planned to allow lightweight IDE tools (like Cline or Roo Code) to pull tasks and mark them as complete, supporting full project context when necessary.
+
+Excludes Enterprise Tools:
+
+No integration with Jira, Trello, or similar platforms is planned; the focus is entirely on a lean solution for solopreneurs.
+
+Checklist: Have We Covered Everything?
+Task Structure & Hierarchy:
+
+ Clear breakdown of tasks into vertical slices, subtasks, and microtasks.
+
+ Template format with minimal context excerpts for each task.
+
+Execution Model:
+
+ External execution using web‑based AI playgrounds with free tiers.
+
+ Browser automation modules for prompt submission and output retrieval.
+
+Version Control & Safety:
+
+ File versioning system before modifications.
+
+ Manual backup cleanup instead of time‑based auto‑deletion.
+
+ GitHub integration with auto‑commit, rollback, and branch protection.
+
+Human Review Process:
+
+ Dashboard with live previews and a clear “Requires Review” flag.
+
+ Feedback loop for iterative refinement (approve/request edit).
+
+Configuration & Supporting Tools:
+
+ In‑app configuration management for paths, protected files, and platform settings.
+
+ Robust error handling, logging, and quality rubrics.
+
+ Automated testing and clear user documentation.
+
+Optional Future Extensions:
+
+ MCP Server / External API for integration with IDEs.
+
+ Deferral of enterprise integrations (Jira, Trello, etc.) in favor of a lean, grassroots tool.
+
+Risk & Resource Management:
+
+ Risk management framework with error thresholds and alerts.
+
+ Resource tracking to avoid free-tier rate limits.
+
+Final Review
+The plan now clearly:
+
+Defines how tasks are broken down and prioritized.
+
+Specifies how external AI playgrounds will be leveraged for parallel task execution.
+
+Details the human review process and feedback loops.
+
+Outlines robust version control, safety, and configuration management without the overhead of enterprise project management tools.

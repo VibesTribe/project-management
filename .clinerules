@@ -1,0 +1,48 @@
+{
+  "rules": [
+    {
+      "trigger": "update memory bank", 
+      "action": "node scripts/documentation-updater.js && node scripts/documentation-updater.js"
+    }
+  ],
+  "systemNotes": {
+    "windowsFileOpenCommand": "Use 'start' instead of 'open' for launching files on Windows systems"
+  },
+  "rules": [
+    {
+      "trigger": "commandExecution",
+      "rules": [
+        "In PowerShell, use semicolons (;) instead of && for command chaining",
+        "Example: cd directory; command instead of cd directory && command"
+      ]
+    },
+    {
+      "trigger": "tool use loop detected",
+      "condition": "same tool and parameters used 3 times in a row", 
+      "action": "stop task and ask for assistance"
+    },
+    {
+      "trigger": "file editing",
+      "rules": [
+        "When using replace_in_file:",
+        "1. Start with smallest possible SEARCH block that uniquely identifies the target",
+        "2. Include only the exact lines needing change plus minimal context",
+        "3. If first attempt fails, try even smaller/more specific SEARCH blocks",
+        "When using write_to_file:",
+        "1. Must preserve all existing content except the specific changes needed",
+        "2. Must verify content matches original file except for intended changes",
+        "3. Must include complete file structure (do not truncate or omit sections)",
+        "General:",
+        "1. Always make backups before editing",
+        "2. When in doubt, ask for verification before writing"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "trigger": "ask_followup_question",
+      "condition": "question == \"I'm unable to complete the task without further assistance. Can you please help me?\"",
+      "action": "node scripts/assistance-handler.js"
+    }
+  ]
+}
